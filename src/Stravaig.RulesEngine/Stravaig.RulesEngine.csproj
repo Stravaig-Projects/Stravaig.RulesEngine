@@ -1,4 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
 
     <PropertyGroup>
         <StravaigBuildTime>$([System.DateTime]::Now.ToString("dddd, d MMMM yyyy 'at' HH:mm:ss zzzz"))</StravaigBuildTime>
@@ -9,7 +14,6 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
         <Title>Stravaig Rules Engine</Title>
         <Authors>Colin Angus Mackay</Authors>
         <Copyright>©$(StravaigCopyrightYear) Stravaig Projects. See licence for more information.</Copyright>
@@ -29,6 +33,10 @@
 
     <ItemGroup>
         <None Include="stravaig-icon.png" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FastExpressionCompiler" Version="3.2.1" />
     </ItemGroup>
 
 </Project>
