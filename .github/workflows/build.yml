@@ -1,4 +1,4 @@
-name: Stravaig PROJECT NAME HERE
+name: Stravaig Rules Engine
 on: 
   push:
     branches: 
@@ -38,9 +38,9 @@ jobs:
     name: Build, Test, and Release
     runs-on: ubuntu-latest
     env:
-      STRAVAIG_SOLUTION: src/XXXX.sln
-      STRAVAIG_TESTS: XXXX.Tests
-      STRAVAIG_PROJECT: XXXX
+      STRAVAIG_SOLUTION: src/Stravaig.RulesEngine.sln
+      STRAVAIG_TESTS: Stravaig.RulesEngine.Tests.Tests
+      STRAVAIG_PROJECT: Stravaig.RulesEngine
     
     steps:
       - name: Check out code
@@ -65,11 +65,6 @@ jobs:
           echo "Is Preview: $STRAVAIG_IS_PREVIEW"
           echo "Is Stable: $STRAVAIG_IS_STABLE"
           
-      - uses: actions/setup-dotnet@v1
-        name: Setup .NET Core 3.1 (Current LTS)
-        with:
-          dotnet-version: 3.1.x
-
       - uses: actions/setup-dotnet@v1
         name: Setup .NET 5.0 (Current)
         with:
