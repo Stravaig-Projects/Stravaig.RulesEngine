@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__Documentation", "__Docume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig.RulesEngine", "Stravaig.RulesEngine\Stravaig.RulesEngine.csproj", "{8C759332-2FC2-4C02-9D44-A5D136D4C116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig-RulesEngine.Tests", "Stravaig-RulesEngine.Tests\Stravaig-RulesEngine.Tests.csproj", "{20DF15C9-CC30-4023-856D-2CE14D37BAA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig.RulesEngine.Tests", "Stravaig.RulesEngine.Tests\Stravaig.RulesEngine.Tests.csproj", "{20DF15C9-CC30-4023-856D-2CE14D37BAA8}"
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
