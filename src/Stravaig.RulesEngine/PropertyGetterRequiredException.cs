@@ -33,6 +33,7 @@ namespace Stravaig.RulesEngine
         /// was working with at the time of the error.</param>
         /// <param name="failingNode">The node of the property path that caused
         /// the expression to fail to build.</param>
+        /// <param name="message">The message that describes the error.</param>
         public PropertyGetterRequiredException(Type contextType, string propertyPath, string failingNode, string message) 
             : base(contextType, propertyPath, message)
         {
@@ -49,6 +50,9 @@ namespace Stravaig.RulesEngine
         /// was working with at the time of the error.</param>
         /// <param name="failingNode">The node of the property path that caused
         /// the expression to fail to build.</param>
+        /// <param name="message">The message that describes the error.</param>
+        /// <param name="inner">The exception that is the cause of the current
+        /// exception.</param>
         public PropertyGetterRequiredException(Type contextType, string propertyPath, string failingNode, string message, Exception inner)
             : base(contextType, propertyPath, message, inner)
         {

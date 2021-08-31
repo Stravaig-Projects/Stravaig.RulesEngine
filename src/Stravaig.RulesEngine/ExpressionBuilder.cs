@@ -1,13 +1,27 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using FastExpressionCompiler;
 
 namespace Stravaig.RulesEngine
 {
+    /// <summary>
+    /// Provides a means to build and compile expressions representing rules.
+    /// </summary>
     public class ExpressionBuilder
     {
+        /// <summary>
+        /// Builds an expression that represents a rule.
+        /// </summary>
+        /// <param name="propertyPath">The dotted path to the property to be examined</param>
+        /// <param name="expression">The expression used to evaluate the value extracted from the propertyPath and the value parameter.</param>
+        /// <param name="value">The value to be evaluated.</param>
+        /// <typeparam name="TContext">The type used at the root of the propertyPath</typeparam>
+        /// <returns>A function that can be used to evaluate the rule.</returns>
+        /// <exception cref="ArgumentNullException">An argument to the method was null</exception>
+        /// <exception cref="PropertyPathNotFoundException">The path to the property could not be found.</exception>
+        /// <exception cref="PublicPropertyGetterRequiredException">The path to the property could not be evaluated because a getter was inaccessible.</exception>
+        /// <exception cref="PropertyGetterRequiredException">The path to the property could not be evaluated because a property was set only.</exception>
         public Func<TContext, bool> Build<TContext>(
             string propertyPath,
             string expression,
@@ -19,7 +33,6 @@ namespace Stravaig.RulesEngine
 
             var paramExpr = Expression.Parameter(typeof(TContext));
             var propertyExpression = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
-            
             
             var equalExpr = Expression.Equal(propertyExpression, Expression.Constant(value));
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(equalExpr, paramExpr);
