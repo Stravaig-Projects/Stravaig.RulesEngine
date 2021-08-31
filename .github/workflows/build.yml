@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STRAVAIG_SOLUTION: src/Stravaig.RulesEngine.sln
-      STRAVAIG_TESTS: Stravaig.RulesEngine.Tests.Tests
+      STRAVAIG_TESTS: Stravaig.RulesEngine.Tests
       STRAVAIG_PROJECT: Stravaig.RulesEngine
     
     steps:
