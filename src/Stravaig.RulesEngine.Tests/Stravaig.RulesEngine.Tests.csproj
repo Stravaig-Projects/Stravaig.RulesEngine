@@ -2,8 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>Stravaig_RulesEngine.Tests</RootNamespace>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 

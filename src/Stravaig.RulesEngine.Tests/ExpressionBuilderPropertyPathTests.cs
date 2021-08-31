@@ -1,12 +1,11 @@
 using System;
 using NUnit.Framework;
 using Shouldly;
-using Stravaig.RulesEngine;
 
-namespace Stravaig_RulesEngine.Tests
+namespace Stravaig.RulesEngine.Tests
 {
     [TestFixture]
-    public class ExpressionBuilderTests
+    public class ExpressionBuilderPropertyPathTests
     {
         public class SubContext
         {
