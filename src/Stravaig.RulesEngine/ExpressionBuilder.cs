@@ -32,15 +32,17 @@ namespace Stravaig.RulesEngine
             if (value == null) throw new ArgumentNullException(nameof(value));
 
             var paramExpr = Expression.Parameter(typeof(TContext));
-            var propertyExpression = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
-            
-            var equalExpr = Expression.Equal(propertyExpression, Expression.Constant(value));
+            var (propertyExpression, propertyType) = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
+
+            object convertedValue = Convert.ChangeType(value, propertyType);
+            var valueExpression = Expression.Constant(convertedValue);
+            var equalExpr = Expression.Equal(propertyExpression, valueExpression);
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(equalExpr, paramExpr);
             var result = lambdaExpr.CompileFast();
             return result;
         }
 
-        private static Expression BuildPropertyExpression<TContext>(
+        private static (Expression, Type) BuildPropertyExpression<TContext>(
             string propertyPath,
             ParameterExpression paramExpr)
         {
@@ -70,7 +72,7 @@ namespace Stravaig.RulesEngine
                 result = Expression.Call(result, getterMethod);
                 currentContext = getterMethod.ReturnType;
             }
-            return result;
+            return (result, currentContext);
         }
     }
 }
