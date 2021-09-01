@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName\Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName.csproj" />
       <ProjectReference Include="..\Stravaig.RulesEngine\Stravaig.RulesEngine.csproj" />
     </ItemGroup>
 

@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig.RulesEngine", "Str
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig.RulesEngine.Tests", "Stravaig.RulesEngine.Tests\Stravaig.RulesEngine.Tests.csproj", "{20DF15C9-CC30-4023-856D-2CE14D37BAA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName", "Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName\Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName.csproj", "{8B5504D4-B382-42DD-A382-3A499EEDA2A5}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +44,10 @@ Global
 		{20DF15C9-CC30-4023-856D-2CE14D37BAA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20DF15C9-CC30-4023-856D-2CE14D37BAA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20DF15C9-CC30-4023-856D-2CE14D37BAA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B5504D4-B382-42DD-A382-3A499EEDA2A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B5504D4-B382-42DD-A382-3A499EEDA2A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B5504D4-B382-42DD-A382-3A499EEDA2A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B5504D4-B382-42DD-A382-3A499EEDA2A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

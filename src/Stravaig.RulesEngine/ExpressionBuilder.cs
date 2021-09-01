@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using FastExpressionCompiler;
+using Stravaig.RulesEngine.OperatorHandlers;
 
 namespace Stravaig.RulesEngine
 {
@@ -10,11 +13,24 @@ namespace Stravaig.RulesEngine
     /// </summary>
     public class ExpressionBuilder
     {
+        private readonly OperatorHandlerServiceLocator _serviceLocator;
+
+        public ExpressionBuilder()
+            : this (new OperatorHandlerServiceLocator())
+        {
+            
+        }
+
+        public ExpressionBuilder(OperatorHandlerServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
+        }
+        
         /// <summary>
         /// Builds an expression that represents a rule.
         /// </summary>
         /// <param name="propertyPath">The dotted path to the property to be examined</param>
-        /// <param name="expression">The expression used to evaluate the value extracted from the propertyPath and the value parameter.</param>
+        /// <param name="operator">The expression used to evaluate the value extracted from the propertyPath and the value parameter.</param>
         /// <param name="value">The value to be evaluated.</param>
         /// <typeparam name="TContext">The type used at the root of the propertyPath</typeparam>
         /// <returns>A function that can be used to evaluate the rule.</returns>
@@ -24,11 +40,11 @@ namespace Stravaig.RulesEngine
         /// <exception cref="PropertyGetterRequiredException">The path to the property could not be evaluated because a property was set only.</exception>
         public Func<TContext, bool> Build<TContext>(
             string propertyPath,
-            string expression,
+            string @operator,
             string value)
         {
             if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
-            if (expression == null) throw new ArgumentNullException(nameof(expression));
+            if (@operator == null) throw new ArgumentNullException(nameof(@operator));
             if (value == null) throw new ArgumentNullException(nameof(value));
 
             var paramExpr = Expression.Parameter(typeof(TContext));
@@ -36,7 +52,9 @@ namespace Stravaig.RulesEngine
 
             object convertedValue = Convert.ChangeType(value, propertyType);
             var valueExpression = Expression.Constant(convertedValue);
-            var equalExpr = Expression.Equal(propertyExpression, valueExpression);
+
+            var handler = _serviceLocator.GetHandlerFromName(@operator);
+            var equalExpr = handler.Handle(propertyExpression, valueExpression);
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(equalExpr, paramExpr);
             var result = lambdaExpr.CompileFast();
             return result;
@@ -46,7 +64,7 @@ namespace Stravaig.RulesEngine
             string propertyPath,
             ParameterExpression paramExpr)
         {
-            var parts = propertyPath.Split(".", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var parts = propertyPath.Split(".", StringSplitOptions.RemoveEmptyEntries);
 
             Expression result = paramExpr;
             var currentContext = typeof(TContext);
