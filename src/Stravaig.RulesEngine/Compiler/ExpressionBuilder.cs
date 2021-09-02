@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using FastExpressionCompiler;
-using Stravaig.RulesEngine.OperatorHandlers;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
-namespace Stravaig.RulesEngine
+namespace Stravaig.RulesEngine.Compiler
 {
     /// <summary>
     /// Provides a means to build and compile expressions representing rules.

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using Shouldly;
-using Stravaig.RulesEngine.OperatorHandlers;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 using Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName;
 
 namespace Stravaig.RulesEngine.Tests

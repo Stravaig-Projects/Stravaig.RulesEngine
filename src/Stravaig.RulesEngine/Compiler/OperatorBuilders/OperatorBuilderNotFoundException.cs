@@ -1,4 +1,4 @@
-namespace Stravaig.RulesEngine.OperatorHandlers
+namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
     /// <summary>
     /// Represents an error when unable to locate an <see cref="OperatorBuilder"/>.

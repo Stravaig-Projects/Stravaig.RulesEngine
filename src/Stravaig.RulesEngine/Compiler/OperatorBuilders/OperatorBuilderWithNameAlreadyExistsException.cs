@@ -1,6 +1,6 @@
 using System;
 
-namespace Stravaig.RulesEngine.OperatorHandlers
+namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
     /// <summary>
     /// Represents and error that occurs when building the service locator look

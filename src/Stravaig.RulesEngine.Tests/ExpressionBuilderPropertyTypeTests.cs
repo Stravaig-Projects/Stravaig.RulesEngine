@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Shouldly;
+using Stravaig.RulesEngine.Compiler;
 
 namespace Stravaig.RulesEngine.Tests
 {

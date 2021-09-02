@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Stravaig.RulesEngine.OperatorHandlers
+namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
     /// <summary>
     /// A locator for <see cref="OperatorBuilder"/> classes.
@@ -27,8 +27,8 @@ namespace Stravaig.RulesEngine.OperatorHandlers
         /// </summary>
         /// <param name="assemblies">A collection of assemblies which contain
         /// additional <see cref="OperatorBuilder"/> classes.</param>
-        /// <exception cref="ArgumentNullException">Thrown if the
-        /// <see cref="assemblies"/> parameter is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the assemblies
+        /// parameter is null.</exception>
         public OperatorBuilderLocator(IEnumerable<Assembly> assemblies)
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));

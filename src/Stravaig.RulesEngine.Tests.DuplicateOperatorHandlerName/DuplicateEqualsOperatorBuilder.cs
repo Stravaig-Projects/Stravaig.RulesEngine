@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Stravaig.RulesEngine.OperatorHandlers;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
 namespace Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName
 {

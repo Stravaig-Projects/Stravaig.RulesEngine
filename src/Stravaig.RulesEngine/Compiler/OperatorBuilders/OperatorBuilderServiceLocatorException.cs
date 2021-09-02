@@ -1,6 +1,6 @@
 using System;
 
-namespace Stravaig.RulesEngine.OperatorHandlers
+namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
     /// <summary>
     /// Represents an error that occurs when locating the operator.

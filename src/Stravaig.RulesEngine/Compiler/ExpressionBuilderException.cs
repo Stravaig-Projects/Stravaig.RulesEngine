@@ -1,6 +1,6 @@
 using System;
 
-namespace Stravaig.RulesEngine
+namespace Stravaig.RulesEngine.Compiler
 {
     /// <summary>
     /// Represents an error that occurs when building the expression.
