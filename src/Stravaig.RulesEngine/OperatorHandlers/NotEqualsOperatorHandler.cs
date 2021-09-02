@@ -2,9 +2,12 @@ using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.OperatorHandlers
 {
+    /// <summary>
+    /// Represents the == (Equals) operator.
+    /// </summary>
     public class NotEqualsOperatorHandler : OperatorHandler
     {
-        public static readonly string[] _operatorNames = { "!=", "NotEquals" };
+        private static readonly string[] _operatorNames = { "!=", "NotEquals" };
 
         /// <inheritdoc />
         public override string[] OperatorNames => _operatorNames;
