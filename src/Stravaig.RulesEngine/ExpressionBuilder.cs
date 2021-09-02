@@ -47,15 +47,16 @@ namespace Stravaig.RulesEngine
             if (@operator == null) throw new ArgumentNullException(nameof(@operator));
             if (value == null) throw new ArgumentNullException(nameof(value));
 
-            var paramExpr = Expression.Parameter(typeof(TContext));
+            var paramExpr = Expression.Parameter(typeof(TContext), "context");
             var (propertyExpression, propertyType) = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
 
             object convertedValue = Convert.ChangeType(value, propertyType);
             var valueExpression = Expression.Constant(convertedValue);
 
             var handler = _serviceLocator.GetBuilder(@operator);
-            var equalExpr = handler.Build(propertyExpression, valueExpression);
-            var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(equalExpr, paramExpr);
+            var evaluationExpression = handler.Build(propertyExpression, valueExpression);
+            var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(evaluationExpression, paramExpr);
+
             var result = lambdaExpr.CompileFast();
             return result;
         }
