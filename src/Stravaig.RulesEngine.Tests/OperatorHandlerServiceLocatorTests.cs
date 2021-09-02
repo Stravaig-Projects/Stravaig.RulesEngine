@@ -11,27 +11,27 @@ namespace Stravaig.RulesEngine.Tests
         [Test]
         public void DefaultInstantiationAllowsAccessToEqualsOperator()
         {
-            var locator = new OperatorHandlerServiceLocator();
-            var handler = locator.GetHandlerFromName("==");
-            handler.ShouldBeOfType(typeof(EqualsOperatorHandler));
+            var locator = new OperatorBuilderLocator();
+            var handler = locator.GetBuilder("==");
+            handler.ShouldBeOfType(typeof(EqualsOperatorBuilder));
         }
         
         [Test]
         public void InvalidOperatorNameThrowsException()
         {
-            var locator = new OperatorHandlerServiceLocator();
-            var ex = Should.Throw<OperatorHandlerNotFoundException>(() => locator.GetHandlerFromName("InvalidOperatorName"));
-            ex.Name.ShouldBe("InvalidOperatorName");
+            var locator = new OperatorBuilderLocator();
+            var ex = Should.Throw<OperatorBuilderNotFoundException>(() => locator.GetBuilder("InvalidOperatorName"));
+            ex.OperatorName.ShouldBe("InvalidOperatorName");
         }
 
         [Test]
         public void DuplicateNameThrowsException()
         {
-            var locator = new OperatorHandlerServiceLocator(typeof(DuplicateEqualsOperatorHandler).Assembly);
-            var ex = Should.Throw<OperatorHandlerWithNameAlreadyExistsException>(() => locator.GetHandlerFromName("DoNotCare"));
-            ex.HandlerName.ShouldBe("==");
-            ex.HandlerType.ShouldBe(typeof(DuplicateEqualsOperatorHandler));
-            ex.ExistingHandlerType.ShouldBe(typeof(EqualsOperatorHandler));
+            var locator = new OperatorBuilderLocator(typeof(DuplicateEqualsOperatorBuilder).Assembly);
+            var ex = Should.Throw<OperatorBuilderWithNameAlreadyExistsException>(() => locator.GetBuilder("DoNotCare"));
+            ex.OperatorName.ShouldBe("==");
+            ex.BuilderType.ShouldBe(typeof(DuplicateEqualsOperatorBuilder));
+            ex.ExistingBuilderType.ShouldBe(typeof(EqualsOperatorBuilder));
         }
     }
 }

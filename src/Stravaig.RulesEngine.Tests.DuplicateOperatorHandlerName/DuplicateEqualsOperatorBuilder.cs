@@ -4,11 +4,11 @@ using Stravaig.RulesEngine.OperatorHandlers;
 
 namespace Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName
 {
-    public class DuplicateEqualsOperatorHandler : OperatorHandler
+    public class DuplicateEqualsOperatorBuilder : OperatorBuilder
     {
         protected override string OperatorName => "==";
 
-        public override Expression Handle(Expression left, Expression right)
+        public override Expression Build(Expression left, Expression right)
         {
             throw new NotImplementedException();
         }

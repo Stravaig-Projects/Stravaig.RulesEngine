@@ -6,7 +6,7 @@ namespace Stravaig.RulesEngine.OperatorHandlers
     /// Represents a binary operator that takes a left and right part and
     /// results in a Boolean.
     /// </summary>
-    public abstract class OperatorHandler
+    public abstract class OperatorBuilder
     {
         /// <summary>
         /// The single name of this operator
@@ -28,7 +28,7 @@ namespace Stravaig.RulesEngine.OperatorHandlers
         /// </summary>
         /// <param name="left">The expression on the left of the operator.</param>
         /// <param name="right">The expression on the right of the operator.</param>
-        /// <returns>An expression that evaluates left angainst right</returns>
-        public abstract Expression Handle(Expression left, Expression right);
+        /// <returns>An expression that evaluates left against right</returns>
+        public abstract Expression Build(Expression left, Expression right);
     }
 }

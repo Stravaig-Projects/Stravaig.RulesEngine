@@ -13,15 +13,15 @@ namespace Stravaig.RulesEngine
     /// </summary>
     public class ExpressionBuilder
     {
-        private readonly OperatorHandlerServiceLocator _serviceLocator;
+        private readonly OperatorBuilderLocator _serviceLocator;
 
         public ExpressionBuilder()
-            : this (new OperatorHandlerServiceLocator())
+            : this (new OperatorBuilderLocator())
         {
             
         }
 
-        public ExpressionBuilder(OperatorHandlerServiceLocator serviceLocator)
+        public ExpressionBuilder(OperatorBuilderLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
         }
@@ -53,8 +53,8 @@ namespace Stravaig.RulesEngine
             object convertedValue = Convert.ChangeType(value, propertyType);
             var valueExpression = Expression.Constant(convertedValue);
 
-            var handler = _serviceLocator.GetHandlerFromName(@operator);
-            var equalExpr = handler.Handle(propertyExpression, valueExpression);
+            var handler = _serviceLocator.GetBuilder(@operator);
+            var equalExpr = handler.Build(propertyExpression, valueExpression);
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(equalExpr, paramExpr);
             var result = lambdaExpr.CompileFast();
             return result;
