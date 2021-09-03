@@ -22,7 +22,7 @@
         <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
         <PackageIcon>stravaig-icon.png</PackageIcon>
         <PackageTags>RulesEngine rules LogicEngine</PackageTags>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+<!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
         <Description>A simple rules engine.
 
             Built on $(StravaigBuildTime).
