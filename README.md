@@ -10,3 +10,4 @@ Name | Description
 `!=`, `NotEquals` | Equivalent to `A != B`
 `>`, `GreaterThan` | Equivalent to `A > B`
 `>=`, `GreaterThanOrEqual` | Equivalent to `A >= B`
+`<`, `LessThan` | Equivalent to `A < B`
