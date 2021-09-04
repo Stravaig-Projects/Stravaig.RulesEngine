@@ -9,7 +9,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
     [TestFixture]
     public class RuleTests
     {
-        public class SingleRuleContext
+        private class TheContext
         {
             public int SomeNumber { get; set; }
         }
@@ -28,6 +28,11 @@ namespace Stravaig.RulesEngine.Tests.Integration
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", "==", "100")),
                 })),
+                new (nameof(SomeNumberIsNot100Test), new RuleSet(new RuleGroup[]
+                {
+                    new RuleGroup(BooleanOperator.And, true, 
+                        new Rule("SomeNumber", "!=", "100")),
+                })),
             });
         }
 
@@ -36,19 +41,34 @@ namespace Stravaig.RulesEngine.Tests.Integration
         [TestCase(false)]
         public void SomeNumberIs100Test(bool isDebug)
         {
-            var context = new SingleRuleContext()
+            var context = new TheContext
             {
                 SomeNumber = 100,
             };
-            var session = _ruleRepository.StartSession<SingleRuleContext>();
-            var matches = FindMatches(context, session, isDebug);
+            var matches = FindMatches(context, isDebug);
             
             matches.Length.ShouldBe(1);
             matches[0].ShouldBe(nameof(SomeNumberIs100Test));
         }
-
-        private string[] FindMatches<TContext>(TContext context, RulesEngineSession<string, TContext> session, bool isDebug)
+        
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void SomeNumberIsNot100Test(bool isDebug)
         {
+            var context = new TheContext
+            {
+                SomeNumber = 101,
+            };
+            var matches = FindMatches(context, isDebug);
+            
+            matches.Length.ShouldBe(1);
+            matches[0].ShouldBe(nameof(SomeNumberIsNot100Test));
+        }
+
+        private string[] FindMatches<TContext>(TContext context, bool isDebug)
+        {
+            var session = _ruleRepository.StartSession<TContext>();
             return isDebug
                 ? session.DEBUG_FindMatches(context).ToArray()
                 : session.FindMatches(context).ToArray();
