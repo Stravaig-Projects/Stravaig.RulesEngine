@@ -26,30 +26,35 @@ namespace Stravaig.RulesEngine.Tests.Integration
             
             _ruleRepository.Load(new KeyValuePair<string, RuleSet>[]
             {
-                new (nameof(SomeNumberIs100Test), new RuleSet(new RuleGroup[]
+                new (nameof(SomeNumberIs100Test), new RuleSet(new[]
                 {
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", "==", "100")),
                 })),
-                new (nameof(SomeNumberIsNot100Test), new RuleSet(new RuleGroup[]
+                new (nameof(SomeNumberIsNot100Test), new RuleSet(new[]
                 {
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", "!=", "100")),
                 })),
-                new (nameof(SomeNumberIsGreaterThan100Test), new RuleSet(new RuleGroup[]
+                new (nameof(SomeNumberIsGreaterThan100Test), new RuleSet(new[]
                 {
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", ">", "100")),
                 })),
-                new (nameof(SomeNumberIsGreaterThanOrEqualTo100Test), new RuleSet(new RuleGroup[]
+                new (nameof(SomeNumberIsGreaterThanOrEqualTo100Test), new RuleSet(new[]
                 {
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", ">=", "100")),
                 })),
-                new (nameof(SomeNumberIsLessThan100Test), new RuleSet(new RuleGroup[]
+                new (nameof(SomeNumberIsLessThan100Test), new RuleSet(new[]
                 {
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", "<", "100")),
+                })),
+                new (nameof(SomeNumberIsLessThanOrEqualTo100Test), new RuleSet(new[]
+                {
+                    new RuleGroup(BooleanOperator.And, true, 
+                        new Rule("SomeNumber", "<=", "100")),
                 })),
             });
         }
@@ -94,6 +99,16 @@ namespace Stravaig.RulesEngine.Tests.Integration
         [TestCase(true, 99)]
         [TestCase(false, 99)]
         public void SomeNumberIsLessThan100Test(bool isDebug, int someNumber)
+        {
+            RunTest(isDebug, someNumber);
+        }
+        
+        [Test]
+        [TestCase(true, 99)]
+        [TestCase(false, 99)]
+        [TestCase(true, 100)]
+        [TestCase(false, 100)]
+        public void SomeNumberIsLessThanOrEqualTo100Test(bool isDebug, int someNumber)
         {
             RunTest(isDebug, someNumber);
         }

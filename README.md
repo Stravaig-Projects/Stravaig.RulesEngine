@@ -11,3 +11,4 @@ Name | Description
 `>`, `GreaterThan` | Equivalent to `A > B`
 `>=`, `GreaterThanOrEqual` | Equivalent to `A >= B`
 `<`, `LessThan` | Equivalent to `A < B`
+`<=`, `LessThanOrEqual` | Equlivalent to `A <= B`
