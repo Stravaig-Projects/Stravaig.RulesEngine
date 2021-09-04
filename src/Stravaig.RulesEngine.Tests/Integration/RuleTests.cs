@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
@@ -24,12 +23,14 @@ namespace Stravaig.RulesEngine.Tests.Integration
             _ruleRepository = new RuleRepository<string>();
             _ruleRepository.Load(
                 SingleRuleTestSets
-                    .Union(MultipleRuleTestSets));
+                    .Union(MultipleRuleTestSets)
+                    .Union(MultipleRuleGroupTestSets));
         }
-
-
+        
         private void ShouldMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
         {
+            // Check rule repository contains the rule we're testing for.
+            _ruleRepository.RuleSetKeys.ShouldContain(methodName);
             string[] matches = RunTest(isDebug, someNumber, someDate);
 
             matches.Length.ShouldBeGreaterThanOrEqualTo(1);
@@ -38,6 +39,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
 
         private void ShouldNotMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
         {
+            // Check rule repository contains the rule we're testing for.
+            _ruleRepository.RuleSetKeys.ShouldContain(methodName);
             string[] matches = RunTest(isDebug, someNumber, someDate);
 
             matches.ShouldNotContain(methodName);
@@ -48,7 +51,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
             var context = new TheContext { SomeNumber = someNumber, SomeDate = someDate };
             var matches = FindMatches(context, isDebug);
 
-            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={someDate:O}:\n" + string.Join("\n", matches.Select(s => $" * {s}")));
+            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={context.SomeDate:O}:\n" + string.Join("\n", matches.Select(s => $" * {s}")));
             return matches;
         }
 

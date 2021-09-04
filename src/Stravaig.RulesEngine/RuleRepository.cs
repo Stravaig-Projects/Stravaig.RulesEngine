@@ -44,6 +44,15 @@ namespace Stravaig.RulesEngine
             Load(keyValuePairs);
         }
 
+        public TKey[] RuleSetKeys
+        {
+            get
+            {
+                lock(_syncRoot) 
+                    return _ruleSets.Keys.ToArray();
+            }
+        }
+
         public RulesEngineSession<TKey, TContext> StartSession<TContext>(Func<TKey, bool>? filterPredicate = null)
         {
             Dictionary<TKey, RuleSet> snapshot;

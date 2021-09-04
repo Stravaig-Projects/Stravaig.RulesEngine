@@ -21,7 +21,11 @@ namespace Stravaig.RulesEngine
         
         public bool IsMatch<TContext>(TContext context)
         {
-            return _compiledMatchers[typeof(TContext)].IsMatch(context);
+            IMatcher compiledMatcher;
+            lock(_syncRoot)
+                compiledMatcher = _compiledMatchers[typeof(TContext)];
+            
+            return compiledMatcher.IsMatch(context);
         }
         
         public bool DEBUG_IsMatch<TContext>(TContext context)
