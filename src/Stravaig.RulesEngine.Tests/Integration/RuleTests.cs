@@ -41,6 +41,11 @@ namespace Stravaig.RulesEngine.Tests.Integration
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", ">", "100")),
                 })),
+                new (nameof(SomeNumberIsGreaterThanOrEqualTo100Test), new RuleSet(new RuleGroup[]
+                {
+                    new RuleGroup(BooleanOperator.And, true, 
+                        new Rule("SomeNumber", ">=", "100")),
+                })),
             });
         }
 
@@ -66,6 +71,16 @@ namespace Stravaig.RulesEngine.Tests.Integration
         [TestCase(true, 101)]
         [TestCase(false, 101)]
         public void SomeNumberIsGreaterThan100Test(bool isDebug, int someNumber)
+        {
+            RunTest(isDebug, someNumber);
+        }
+
+        [Test]
+        [TestCase(true, 100)]
+        [TestCase(false, 100)]
+        [TestCase(true, 101)]
+        [TestCase(false, 101)]
+        public void SomeNumberIsGreaterThanOrEqualTo100Test(bool isDebug, int someNumber)
         {
             RunTest(isDebug, someNumber);
         }
