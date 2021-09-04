@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Shouldly;
 
@@ -33,6 +36,11 @@ namespace Stravaig.RulesEngine.Tests.Integration
                     new RuleGroup(BooleanOperator.And, true, 
                         new Rule("SomeNumber", "!=", "100")),
                 })),
+                new (nameof(SomeNumberIsGreaterThan100Test), new RuleSet(new RuleGroup[]
+                {
+                    new RuleGroup(BooleanOperator.And, true, 
+                        new Rule("SomeNumber", ">", "100")),
+                })),
             });
         }
 
@@ -41,29 +49,36 @@ namespace Stravaig.RulesEngine.Tests.Integration
         [TestCase(false)]
         public void SomeNumberIs100Test(bool isDebug)
         {
-            var context = new TheContext
-            {
-                SomeNumber = 100,
-            };
-            var matches = FindMatches(context, isDebug);
-            
-            matches.Length.ShouldBe(1);
-            matches[0].ShouldBe(nameof(SomeNumberIs100Test));
+            RunTest(isDebug, 100);
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SomeNumberIsNot100Test(bool isDebug)
+        [TestCase(true, 99)]
+        [TestCase(false, 99)]
+        [TestCase(true, 101)]
+        [TestCase(false, 101)]
+        public void SomeNumberIsNot100Test(bool isDebug, int someNumber)
         {
-            var context = new TheContext
-            {
-                SomeNumber = 101,
-            };
+            RunTest(isDebug, someNumber);
+        }
+        
+        [Test]
+        [TestCase(true, 101)]
+        [TestCase(false, 101)]
+        public void SomeNumberIsGreaterThan100Test(bool isDebug, int someNumber)
+        {
+            RunTest(isDebug, someNumber);
+        }
+
+        private void RunTest(bool isDebug, int someNumber, [CallerMemberName]string methodName = null)
+        {
+            var context = new TheContext { SomeNumber = someNumber };
             var matches = FindMatches(context, isDebug);
             
-            matches.Length.ShouldBe(1);
-            matches[0].ShouldBe(nameof(SomeNumberIsNot100Test));
+            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}:\n"+string.Join("\n", matches.Select(s => $" * {s}")));
+
+            matches.Length.ShouldBeGreaterThanOrEqualTo(1);
+            matches.ShouldContain(methodName);
         }
 
         private string[] FindMatches<TContext>(TContext context, bool isDebug)
