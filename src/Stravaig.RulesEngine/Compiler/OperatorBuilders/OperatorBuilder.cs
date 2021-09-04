@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
@@ -22,6 +23,10 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <remarks>Override this only the handler has multiple names.</remarks>
         public virtual string[] OperatorNames => new[] { OperatorName };
         
+        public Type? LeftType { get; }
+        
+        public Type? RightType { get; }
+        
         /// <summary>
         /// Builds the expression that evaluates the left expression against the
         /// right expression.
@@ -29,6 +34,14 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <param name="left">The expression on the left of the operator.</param>
         /// <param name="right">The expression on the right of the operator.</param>
         /// <returns>An expression that evaluates left against right</returns>
-        public abstract Expression Build(Expression left, Expression right);
+        public abstract Expression Build(Expression leftPropertyExpression, string rightValueAsString);
+
+        protected ConstantExpression GetRightExpessionFromConstantValue(object value, Type propertyType)
+        {
+            object convertedValue = Convert.ChangeType(value, RightType ?? propertyType);
+            var valueExpression = Expression.Constant(convertedValue);
+            return valueExpression;
+        }
+        
     }
 }

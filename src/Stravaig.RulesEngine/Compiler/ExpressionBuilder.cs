@@ -46,20 +46,19 @@ namespace Stravaig.RulesEngine.Compiler
             if (value == null) throw new ArgumentNullException(nameof(value));
 
             var paramExpr = Expression.Parameter(typeof(TContext), "context");
-            var (propertyExpression, propertyType) = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
+            var propertyExpression = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
+            var propertyType = propertyExpression.Type;
 
-            object convertedValue = Convert.ChangeType(value, propertyType);
-            var valueExpression = Expression.Constant(convertedValue);
+            var handler = _serviceLocator.GetBuilder(@operator, propertyType);
 
-            var handler = _serviceLocator.GetBuilder(@operator);
-            var evaluationExpression = handler.Build(propertyExpression, valueExpression);
+            var evaluationExpression = handler.Build(propertyExpression, value);
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(evaluationExpression, paramExpr);
 
             var result = lambdaExpr.CompileFast();
             return result;
         }
 
-        private static (Expression, Type) BuildPropertyExpression<TContext>(
+        private static Expression BuildPropertyExpression<TContext>(
             string propertyPath,
             ParameterExpression paramExpr)
         {
@@ -89,7 +88,7 @@ namespace Stravaig.RulesEngine.Compiler
                 result = Expression.Call(result, getterMethod);
                 currentContext = getterMethod.ReturnType;
             }
-            return (result, currentContext);
+            return result;
         }
     }
 }

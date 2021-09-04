@@ -11,7 +11,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
     public class OperatorBuilderLocator
     {
         private readonly Assembly[] _handlerAssemblies;
-        private readonly Lazy<IReadOnlyDictionary<string, OperatorBuilder>> _lazyLookup;
+        private readonly Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>> _lazyLookup;
 
         /// <summary>
         /// Initialises the locator with the default set of operators.
@@ -36,7 +36,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
                 .Union(assemblies)
                 .ToArray();
 
-            _lazyLookup = new Lazy<IReadOnlyDictionary<string, OperatorBuilder>>(BuildDictionary);
+            _lazyLookup = new Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>>(BuildDictionary);
         }
 
         /// <summary>
@@ -57,16 +57,21 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <returns>The builder that represents the named operation.</returns>
         /// <exception cref="OperatorBuilderNotFoundException">The named
         /// operator cannot be found.</exception>
-        public OperatorBuilder GetBuilder(string name)
+        public OperatorBuilder GetBuilder(string name, Type? leftType)
         {
-            if (_lazyLookup.Value.TryGetValue(name, out var result))
+            if (_lazyLookup.Value.TryGetValue(name, out var builderList))
+            {
+                // TODO: pick the most specific type.
+                builderList.FirstOrDefault()
+                
                 return result;
+            }
             throw new OperatorBuilderNotFoundException(name);
         }
 
-        private IReadOnlyDictionary<string, OperatorBuilder> BuildDictionary()
+        private IReadOnlyDictionary<string, List<OperatorBuilder>> BuildDictionary()
         {
-            var result = new Dictionary<string, OperatorBuilder>();
+            var result = new Dictionary<string, List<OperatorBuilder>>();
             var handlerTypes = _handlerAssemblies
                 .SelectMany(a => a.DefinedTypes)
                 .Where(t => t.IsSubclassOf(typeof(OperatorBuilder)));
@@ -77,14 +82,16 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
                     continue;
                 foreach (string name in handler.OperatorNames)
                 {
-                    if (result.TryAdd(name, handler) == false)
+                    bool newList = false;
+                    if (!result.TryGetValue(name, out var handlerList))
                     {
-                        if (result.TryGetValue(name, out var existingHandler))
-                            throw new OperatorBuilderWithNameAlreadyExistsException(name, handlerType, existingHandler.GetType());
-                        
-                        // Shouldn't really be able to get to this exception, but just in case...
-                        throw new InvalidOperationException($"Failed to add handler {handlerType.FullName} with name \"{name}\".");
+                        newList = true;                        
+                        handlerList = new List<OperatorBuilder>();
                     }
+                    
+                    handlerList.Add(handler);
+                    if (newList)
+                        result.Add(name, handlerList);
                 }
             }
 

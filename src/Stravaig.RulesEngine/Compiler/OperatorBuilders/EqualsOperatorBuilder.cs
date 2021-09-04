@@ -13,9 +13,9 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         public override string[] OperatorNames => _operatorNames;
 
         /// <inheritdoc />
-        public override Expression Build(Expression left, Expression right)
+        public override Expression Build(Expression left, string right)
         {
-            return Expression.Equal(left, right);
+            return Expression.Equal(left, GetRightExpessionFromConstantValue(right, left.Type));
         }
     }
 }
