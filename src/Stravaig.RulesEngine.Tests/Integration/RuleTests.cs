@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Shouldly;
@@ -10,118 +8,48 @@ using Shouldly;
 namespace Stravaig.RulesEngine.Tests.Integration
 {
     [TestFixture]
-    public class RuleTests
+    public partial class RuleTests
     {
         private class TheContext
         {
             public int SomeNumber { get; set; }
+            public DateTime SomeDate { get; set; }
         }
 
         private RuleRepository<string> _ruleRepository;
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             _ruleRepository = new RuleRepository<string>();
-            
-            _ruleRepository.Load(new KeyValuePair<string, RuleSet>[]
-            {
-                new (nameof(SomeNumberIs100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", "==", "100")),
-                })),
-                new (nameof(SomeNumberIsNot100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", "!=", "100")),
-                })),
-                new (nameof(SomeNumberIsGreaterThan100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", ">", "100")),
-                })),
-                new (nameof(SomeNumberIsGreaterThanOrEqualTo100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", ">=", "100")),
-                })),
-                new (nameof(SomeNumberIsLessThan100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", "<", "100")),
-                })),
-                new (nameof(SomeNumberIsLessThanOrEqualTo100Test), new RuleSet(new[]
-                {
-                    new RuleGroup(BooleanOperator.And, true, 
-                        new Rule("SomeNumber", "<=", "100")),
-                })),
-            });
+            _ruleRepository.Load(
+                SingleRuleTestSets
+                    .Union(MultipleRuleTestSets));
         }
 
-        [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SomeNumberIs100Test(bool isDebug)
-        {
-            RunTest(isDebug, 100);
-        }
-        
-        [Test]
-        [TestCase(true, 99)]
-        [TestCase(false, 99)]
-        [TestCase(true, 101)]
-        [TestCase(false, 101)]
-        public void SomeNumberIsNot100Test(bool isDebug, int someNumber)
-        {
-            RunTest(isDebug, someNumber);
-        }
-        
-        [Test]
-        [TestCase(true, 101)]
-        [TestCase(false, 101)]
-        public void SomeNumberIsGreaterThan100Test(bool isDebug, int someNumber)
-        {
-            RunTest(isDebug, someNumber);
-        }
 
-        [Test]
-        [TestCase(true, 100)]
-        [TestCase(false, 100)]
-        [TestCase(true, 101)]
-        [TestCase(false, 101)]
-        public void SomeNumberIsGreaterThanOrEqualTo100Test(bool isDebug, int someNumber)
+        private void ShouldMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
         {
-            RunTest(isDebug, someNumber);
-        }
-        
-        [Test]
-        [TestCase(true, 99)]
-        [TestCase(false, 99)]
-        public void SomeNumberIsLessThan100Test(bool isDebug, int someNumber)
-        {
-            RunTest(isDebug, someNumber);
-        }
-        
-        [Test]
-        [TestCase(true, 99)]
-        [TestCase(false, 99)]
-        [TestCase(true, 100)]
-        [TestCase(false, 100)]
-        public void SomeNumberIsLessThanOrEqualTo100Test(bool isDebug, int someNumber)
-        {
-            RunTest(isDebug, someNumber);
-        }
-
-        private void RunTest(bool isDebug, int someNumber, [CallerMemberName]string methodName = null)
-        {
-            var context = new TheContext { SomeNumber = someNumber };
-            var matches = FindMatches(context, isDebug);
-            
-            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}:\n"+string.Join("\n", matches.Select(s => $" * {s}")));
+            string[] matches = RunTest(isDebug, someNumber, someDate);
 
             matches.Length.ShouldBeGreaterThanOrEqualTo(1);
             matches.ShouldContain(methodName);
+        }
+
+        private void ShouldNotMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
+        {
+            string[] matches = RunTest(isDebug, someNumber, someDate);
+
+            matches.ShouldNotContain(methodName);
+        }
+
+        private string[] RunTest(bool isDebug, int someNumber, DateTime someDate)
+        {
+            var context = new TheContext { SomeNumber = someNumber, SomeDate = someDate };
+            var matches = FindMatches(context, isDebug);
+
+            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={someDate:O}:\n" + string.Join("\n", matches.Select(s => $" * {s}")));
+            return matches;
         }
 
         private string[] FindMatches<TContext>(TContext context, bool isDebug)
