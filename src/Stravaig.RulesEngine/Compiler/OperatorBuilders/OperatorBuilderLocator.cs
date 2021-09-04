@@ -49,7 +49,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
             : this((IEnumerable<Assembly>)assemblies)
         {
         }
-
+        
         /// <summary>
         /// Gets the <see cref="OperatorBuilder"/> with the given name.
         /// </summary>

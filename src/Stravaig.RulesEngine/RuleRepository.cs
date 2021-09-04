@@ -1,14 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stravaig.RulesEngine.Compiler;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
 namespace Stravaig.RulesEngine
 {
     public class RuleRepository<TKey>
     {
+        private readonly RulesEngineOptions<TKey> _options;
+        private readonly ExpressionBuilder _expressionBuilder;
         private readonly object _syncRoot = new object();
-        private readonly Dictionary<TKey, RuleSet> _ruleSets = new Dictionary<TKey, RuleSet>();
+        private readonly Dictionary<TKey, RuleSet> _ruleSets;
 
+        public RuleRepository()
+            : this (new RulesEngineOptions<TKey>())
+        {
+        }
+        
+        public RuleRepository(RulesEngineOptions<TKey> options)
+        {
+            _options = options;
+            _expressionBuilder = new ExpressionBuilder(new OperatorBuilderLocator(options.AdditionalOperatorAssemblies));
+            _ruleSets = new Dictionary<TKey, RuleSet>(options.KeyEqualityComparer);
+        }
+        
         public void Load(IEnumerable<KeyValuePair<TKey, RuleSet>> rules)
         {
             if (rules == null) throw new ArgumentNullException(nameof(rules));
@@ -34,18 +50,19 @@ namespace Stravaig.RulesEngine
             lock (_syncRoot)
             {
                 if(filterPredicate == null)
-                    snapshot = new Dictionary<TKey, RuleSet>(_ruleSets);
+                    snapshot = new Dictionary<TKey, RuleSet>(_ruleSets, _options.KeyEqualityComparer);
                 else
                 {
                     snapshot = new Dictionary<TKey, RuleSet>(
                         _ruleSets
-                            .Where(kvp => filterPredicate(kvp.Key)));
+                            .Where(kvp => filterPredicate(kvp.Key)),
+                        _options.KeyEqualityComparer);
                 }
             }
 
             foreach (var ruleSet in snapshot.Values)
             {
-                // TODO: Compile the rules
+                ruleSet.CompileToFunc<TContext>(_expressionBuilder);
             }
 
             return new RulesEngineSession<TKey, TContext>(snapshot);

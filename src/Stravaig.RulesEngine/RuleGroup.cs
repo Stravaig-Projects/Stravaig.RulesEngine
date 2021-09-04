@@ -15,6 +15,16 @@ namespace Stravaig.RulesEngine
         
         public RuleGroup[] RuleGroups { get; }
 
+        public RuleGroup(BooleanOperator @operator, bool expectedResult, params Rule[] rules)
+            : this(@operator, expectedResult, rules, Array.Empty<RuleGroup>())
+        {
+        }
+
+        public RuleGroup(BooleanOperator @operator, bool expectedResult, params RuleGroup[] ruleGroups)
+            : this(@operator, expectedResult, Array.Empty<Rule>(), ruleGroups)
+        {
+        }
+
         public RuleGroup(BooleanOperator @operator, bool expectedResult, Rule[]? rules = null, RuleGroup[]? ruleGroups = null)
         {
             BooleanOperator = @operator;
@@ -72,22 +82,22 @@ namespace Stravaig.RulesEngine
 
         private Func<Func<TContext, bool>, Func<TContext, bool>, Func<TContext, bool>> GetBooleanOperationFunction<TContext>()
         {
-            static Func<TContext, bool> CreateAndFunc<TContext>(Func<TContext, bool> resultSoFar, Func<TContext, bool> compiledRule)
-            {
-                return ctx => resultSoFar(ctx) && compiledRule(ctx);
-            }
-
-            static Func<TContext, bool> CreateOrFunc<TContext>(Func<TContext, bool> resultSoFar, Func<TContext, bool> compiledRule)
-            {
-                return ctx => resultSoFar(ctx) || compiledRule(ctx);
-            }
-
             return BooleanOperator switch
             {
                 BooleanOperator.And => CreateAndFunc,
                 BooleanOperator.Or => CreateOrFunc,
                 _ => throw new InvalidOperationException($"BooleanOperator has an unexpected value of {BooleanOperator}")
             };
+        }
+        
+        private static Func<TContext, bool> CreateAndFunc<TContext>(Func<TContext, bool> resultSoFar, Func<TContext, bool> compiledRule)
+        {
+            return ctx => resultSoFar(ctx) && compiledRule(ctx);
+        }
+
+        private static Func<TContext, bool> CreateOrFunc<TContext>(Func<TContext, bool> resultSoFar, Func<TContext, bool> compiledRule)
+        {
+            return ctx => resultSoFar(ctx) || compiledRule(ctx);
         }
     }
 }
