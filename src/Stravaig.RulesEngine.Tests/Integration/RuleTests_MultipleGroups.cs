@@ -52,6 +52,18 @@ namespace Stravaig.RulesEngine.Tests.Integration
         [TestCase(false, 100, 2000, false)]
         public void TwoGroupsOredTogether(bool isDebug, int someNumber, int year, bool isMatch)
         {
+            // {
+            //   [
+            //     {
+            //       "BooleanExpression": "And",
+            //       "Rules" :[ 
+            //         { PropertyPath : "A.B.C", Operator: ">=", Value: "123" },
+            //         { PropertyPath : "A.B.D", Operator: "==", Value: "ABC" },
+            //     },
+            //     {}
+            //   ]
+            // }
+            //
             // (
             //     (someNumber == 100 && year == 2021) == true ||
             //     (someNumber == 50 && year == 2000) == true

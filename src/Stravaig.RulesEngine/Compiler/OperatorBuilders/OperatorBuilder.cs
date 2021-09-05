@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
@@ -9,6 +10,14 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
     /// </summary>
     public abstract class OperatorBuilder
     {
+        public OperatorBuilder()
+        {
+        }
+
+        public OperatorBuilder(Type leftType)
+        {
+            LeftType = leftType;
+        }
         /// <summary>
         /// The single name of this operator
         /// </summary>
@@ -36,12 +45,28 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <returns>An expression that evaluates left against right</returns>
         public abstract Expression Build(Expression leftPropertyExpression, string rightValueAsString);
 
-        protected ConstantExpression GetRightExpessionFromConstantValue(object value, Type propertyType)
+        protected ConstantExpression GetRightExpressionFromConstantValue(object value, Type propertyType)
         {
             object convertedValue = Convert.ChangeType(value, RightType ?? propertyType);
             var valueExpression = Expression.Constant(convertedValue);
             return valueExpression;
         }
-        
+
+        public bool CanMatchType(Type desiredLeftType)
+        {
+            return LeftType == null ||
+                   LeftType == desiredLeftType ||
+                   desiredLeftType.IsSubclassOf(LeftType);
+        }
+
+
+        public static IComparer<Type?> CompareWithRespectTo(Type desiredLeftType)
+        {
+            // 1 = This instance is greater than other
+            // 0 = This instance is the same as other
+            // -1 = this instance is less than other.
+
+            return new OperatorBuilderTypeComparer(desiredLeftType);
+        }
     }
 }

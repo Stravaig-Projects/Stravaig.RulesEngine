@@ -15,7 +15,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <inheritdoc />
         public override Expression Build(Expression left, string right)
         {
-            return Expression.GreaterThan(left, GetRightExpessionFromConstantValue(right, left.Type));
+            return Expression.GreaterThan(left, GetRightExpressionFromConstantValue(right, left.Type));
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Linq.Expressions;
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
     /// <summary>
-    /// Represents the < (LessThan) operator.
+    /// Represents the <= (LessThanOrEqual) operator.
     /// </summary>
-    public class LessThanOperatorBuilder : OperatorBuilder
+    public class LessThanOrEqualOperatorBuilder : OperatorBuilder
     {
-        private static readonly string[] _operatorNames = { "<", "LessThan" };
+        private static readonly string[] _operatorNames = { "<=", "LessThanOrEqual" };
 
         /// <inheritdoc />
         public override string[] OperatorNames => _operatorNames;
@@ -15,7 +15,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <inheritdoc />
         public override Expression Build(Expression left, string right)
         {
-            return Expression.LessThan(left, GetRightExpessionFromConstantValue(right, left.Type));
+            return Expression.LessThanOrEqual(left, GetRightExpressionFromConstantValue(right, left.Type));
         }
     }
 }

@@ -7,15 +7,15 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
     /// </summary>
     public class EqualsOperatorBuilder : OperatorBuilder
     {
-        private static readonly string[] _operatorNames = { "==", "Equals" };
+        internal static readonly string[] StandardOperatorNames = { "==", "Equals" };
 
         /// <inheritdoc />
-        public override string[] OperatorNames => _operatorNames;
+        public override string[] OperatorNames => StandardOperatorNames;
 
         /// <inheritdoc />
         public override Expression Build(Expression left, string right)
         {
-            return Expression.Equal(left, GetRightExpessionFromConstantValue(right, left.Type));
+            return Expression.Equal(left, GetRightExpressionFromConstantValue(right, left.Type));
         }
     }
 }

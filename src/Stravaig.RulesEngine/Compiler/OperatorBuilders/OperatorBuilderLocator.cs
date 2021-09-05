@@ -10,7 +10,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
     /// </summary>
     public class OperatorBuilderLocator
     {
-        private readonly Assembly[] _handlerAssemblies;
+        private readonly Type[] _builderTypes;
         private readonly Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>> _lazyLookup;
 
         /// <summary>
@@ -29,14 +29,23 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// additional <see cref="OperatorBuilder"/> classes.</param>
         /// <exception cref="ArgumentNullException">Thrown if the assemblies
         /// parameter is null.</exception>
-        public OperatorBuilderLocator(IEnumerable<Assembly> assemblies)
+        public OperatorBuilderLocator(IEnumerable<Assembly> assemblies) :
+            this(GetOperatorBuilderTypesFromAssemblies(assemblies))
+        {
+        }
+
+        private static Type[] GetOperatorBuilderTypesFromAssemblies(IEnumerable<Assembly> assemblies)
         {
             if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
-            _handlerAssemblies = new[] { typeof(OperatorBuilder).Assembly }
+            var builderAssemblies = new[] { typeof(OperatorBuilder).Assembly }
                 .Union(assemblies)
                 .ToArray();
 
-            _lazyLookup = new Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>>(BuildDictionary);
+            return builderAssemblies
+                .SelectMany(a => a.DefinedTypes)
+                .Where(t => !t.IsAbstract)
+                .Cast<Type>()
+                .ToArray();
         }
 
         /// <summary>
@@ -48,6 +57,16 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         public OperatorBuilderLocator(params Assembly[] assemblies)
             : this((IEnumerable<Assembly>)assemblies)
         {
+            _lazyLookup = new Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>>(BuildDictionary);
+        }
+
+        public OperatorBuilderLocator(params Type[] operatorBuilderTypes)
+        {
+            _builderTypes = operatorBuilderTypes
+                .Where(t => t.IsSubclassOf(typeof(OperatorBuilder)))
+                .ToArray();
+
+            _lazyLookup = new Lazy<IReadOnlyDictionary<string, List<OperatorBuilder>>>(BuildDictionary);
         }
         
         /// <summary>
@@ -57,27 +76,31 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <returns>The builder that represents the named operation.</returns>
         /// <exception cref="OperatorBuilderNotFoundException">The named
         /// operator cannot be found.</exception>
-        public OperatorBuilder GetBuilder(string name, Type? leftType)
+        public OperatorBuilder GetBuilder(string name, Type desiredLeftType)
         {
             if (_lazyLookup.Value.TryGetValue(name, out var builderList))
             {
-                // TODO: pick the most specific type.
-                builderList.FirstOrDefault()
-                
-                return result;
+                var result = GetBestOperatorBuilder(builderList, desiredLeftType);
+                if (result != null)
+                    return result;
             }
             throw new OperatorBuilderNotFoundException(name);
+        }
+
+        private static OperatorBuilder? GetBestOperatorBuilder(IReadOnlyList<OperatorBuilder> builderList, Type desiredLeftType)
+        {
+            return builderList
+                .Where(ob => ob.CanMatchType(desiredLeftType))
+                .OrderByDescending(ob=>ob.LeftType, OperatorBuilder.CompareWithRespectTo(desiredLeftType))
+                .FirstOrDefault();
         }
 
         private IReadOnlyDictionary<string, List<OperatorBuilder>> BuildDictionary()
         {
             var result = new Dictionary<string, List<OperatorBuilder>>();
-            var handlerTypes = _handlerAssemblies
-                .SelectMany(a => a.DefinedTypes)
-                .Where(t => t.IsSubclassOf(typeof(OperatorBuilder)));
-            foreach (var handlerType in handlerTypes)
+            foreach (var builderType in _builderTypes)
             {
-                var handler = (OperatorBuilder?)Activator.CreateInstance(handlerType);
+                var handler = (OperatorBuilder?)Activator.CreateInstance(builderType);
                 if (handler == null)
                     continue;
                 foreach (string name in handler.OperatorNames)

@@ -8,7 +8,7 @@ namespace Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName
     {
         protected override string OperatorName => "==";
 
-        public override Expression Build(Expression left, Expression right)
+        public override Expression Build(Expression left, string right)
         {
             throw new NotImplementedException();
         }
