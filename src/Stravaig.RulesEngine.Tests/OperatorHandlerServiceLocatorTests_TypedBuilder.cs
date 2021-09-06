@@ -6,7 +6,7 @@ using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
 namespace Stravaig.RulesEngine.Tests
 {
-    public partial class OperatorHandlerServiceLocatorTests
+    public partial class OperatorBuilderServiceLocatorTests
     {
         public class StringEqualsOperatorBuilder : OperatorBuilder
         {

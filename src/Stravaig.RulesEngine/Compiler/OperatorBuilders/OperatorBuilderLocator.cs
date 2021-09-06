@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 {
@@ -85,6 +86,38 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
                     return result;
             }
             throw new OperatorBuilderNotFoundException(name);
+        }
+
+        // Special exception, properties for assisting in the debugger
+        // ReSharper disable once InconsistentNaming
+        public string DEBUG_AvailableBuilders
+        {
+            get
+            {
+                IReadOnlyDictionary<string, List<OperatorBuilder>> lookup = _lazyLookup.Value;
+                int maxOperatorLength = lookup.Keys.Max(k => k.Length);
+
+                StringBuilder sb = new ((maxOperatorLength+3) * lookup.Count);
+                foreach (string key in lookup.Keys.OrderBy(k => k))
+                {
+                    sb.Append(key.PadRight(maxOperatorLength+1));
+                    sb.Append(": ");
+                    bool isFirst = true;
+                    foreach (var builder in lookup[key])
+                    {
+                        if (isFirst)
+                            isFirst = false;
+                        else
+                            sb.Append(string.Empty.PadRight(maxOperatorLength + 3));
+                        sb.Append(builder.LeftType == null
+                            ? "(*) "
+                            : $"({builder.LeftType.Name}) ");
+                        sb.AppendLine(builder.GetType().FullName);
+                    }
+                }
+
+                return sb.ToString();
+            }
         }
 
         private static OperatorBuilder? GetBestOperatorBuilder(IReadOnlyList<OperatorBuilder> builderList, Type desiredLeftType)

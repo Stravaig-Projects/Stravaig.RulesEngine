@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
 using Shouldly;
@@ -7,7 +8,7 @@ using Stravaig.RulesEngine.Tests.DuplicateOperatorHandlerName;
 namespace Stravaig.RulesEngine.Tests
 {
     [TestFixture]
-    public partial class OperatorHandlerServiceLocatorTests
+    public partial class OperatorBuilderServiceLocatorTests
     {
         [Test]
         public void DefaultInstantiationAllowsAccessToEqualsOperator()
@@ -34,6 +35,15 @@ namespace Stravaig.RulesEngine.Tests
         //     ex.BuilderType.ShouldBe(typeof(DuplicateEqualsOperatorBuilder));
         //     ex.ExistingBuilderType.ShouldBe(typeof(EqualsOperatorBuilder));
         // }
-        
+
+        [Test]
+        public void ShowDebugOutput()
+        {
+            // Not a test, but a quick way to visually inspect the debug info
+            // string that would be displayed to a developer in the debugger.
+            var locator = new OperatorBuilderLocator();
+            string debugInfo = locator.DEBUG_AvailableBuilders;
+            Console.WriteLine(debugInfo);
+        }
     }
 }
