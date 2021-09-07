@@ -10,7 +10,7 @@ namespace Stravaig.RulesEngine
     {
         private readonly RulesEngineOptions<TKey> _options;
         private readonly ExpressionBuilder _expressionBuilder;
-        private readonly object _syncRoot = new object();
+        private readonly object _syncRoot = new ();
         private readonly Dictionary<TKey, RuleSet> _ruleSets;
 
         public RuleRepository()
@@ -24,6 +24,8 @@ namespace Stravaig.RulesEngine
             _expressionBuilder = new ExpressionBuilder(new OperatorBuilderLocator(options.AdditionalOperatorAssemblies));
             _ruleSets = new Dictionary<TKey, RuleSet>(options.KeyEqualityComparer);
         }
+        
+        public string DEBUG_AvailableBuilders => _expressionBuilder.DEBUG_AvailableBuilders;
         
         public void Load(IEnumerable<KeyValuePair<TKey, RuleSet>> rules)
         {

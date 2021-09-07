@@ -13,6 +13,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
         {
             public int SomeNumber { get; set; }
             public DateTime SomeDate { get; set; }
+            public string SomeString { get; set; }
         }
 
         private RuleRepository<string> _ruleRepository;
@@ -24,35 +25,45 @@ namespace Stravaig.RulesEngine.Tests.Integration
             _ruleRepository.Load(
                 SingleRuleTestSets
                     .Union(MultipleRuleTestSets)
+                    .Union(StringEqualityRuleSets)
                     .Union(MultipleRuleGroupTestSets));
         }
         
-        private void ShouldMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
+        private void ShouldMatchRule(bool isDebug, int someNumber = default, DateTime someDate = default, string someString = default, [CallerMemberName]string methodName = null)
         {
             // Check rule repository contains the rule we're testing for.
             _ruleRepository.RuleSetKeys.ShouldContain(methodName);
-            string[] matches = RunTest(isDebug, someNumber, someDate);
+            string[] matches = RunTest(isDebug, someNumber, someDate, someString);
 
             matches.Length.ShouldBeGreaterThanOrEqualTo(1);
             matches.ShouldContain(methodName);
         }
 
-        private void ShouldNotMatchRule(bool isDebug, int someNumber, DateTime someDate = default, [CallerMemberName]string methodName = null)
+        private void ShouldNotMatchRule(bool isDebug, int someNumber = default, DateTime someDate = default, string someString = default, [CallerMemberName]string methodName = null)
         {
             // Check rule repository contains the rule we're testing for.
             _ruleRepository.RuleSetKeys.ShouldContain(methodName);
-            string[] matches = RunTest(isDebug, someNumber, someDate);
+            string[] matches = RunTest(isDebug, someNumber, someDate, someString);
 
             matches.ShouldNotContain(methodName);
         }
 
-        private string[] RunTest(bool isDebug, int someNumber, DateTime someDate)
+        private string[] RunTest(bool isDebug, int someNumber, DateTime someDate, string someString)
         {
-            var context = new TheContext { SomeNumber = someNumber, SomeDate = someDate };
-            var matches = FindMatches(context, isDebug);
+            try
+            {
+                var context = new TheContext { SomeNumber = someNumber, SomeDate = someDate, SomeString = someString};
+                var matches = FindMatches(context, isDebug);
 
-            Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={context.SomeDate:O}:\n" + string.Join("\n", matches.Select(s => $" * {s}")));
-            return matches;
+                Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={context.SomeDate:O}; SomeString=\"{context.SomeString}\":\n" + string.Join("\n", matches.Select(s => $" * {s}")));
+                return matches;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Available Operators:");
+                Console.WriteLine(_ruleRepository.DEBUG_AvailableBuilders);
+                throw;
+            }
         }
 
         private string[] FindMatches<TContext>(TContext context, bool isDebug)

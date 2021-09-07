@@ -23,6 +23,8 @@ namespace Stravaig.RulesEngine.Compiler
         {
             _serviceLocator = serviceLocator;
         }
+
+        public string DEBUG_AvailableBuilders => _serviceLocator.DEBUG_AvailableBuilders;
         
         /// <summary>
         /// Builds an expression that represents a rule.

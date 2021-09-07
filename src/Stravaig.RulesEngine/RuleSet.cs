@@ -7,8 +7,8 @@ namespace Stravaig.RulesEngine
 {
     public class RuleSet : IMatcher, ICompiler
     {
-        private readonly object _syncRoot = new object();
-        private readonly Dictionary<Type, IMatcher> _compiledMatchers = new Dictionary<Type, IMatcher>();
+        private readonly object _syncRoot = new ();
+        private readonly Dictionary<Type, IMatcher> _compiledMatchers = new ();
         
         public RuleGroup[] RuleGroups { get; }
 
@@ -17,6 +17,28 @@ namespace Stravaig.RulesEngine
             if (ruleGroups == null) throw new ArgumentNullException(nameof(ruleGroups));
             if (ruleGroups.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(ruleGroups));
             RuleGroups = ruleGroups;
+        }
+
+        public RuleSet(IEnumerable<RuleGroup> ruleGroups)
+            : this(ruleGroups.ToArray())
+        {
+        }
+
+        public RuleSet(Rule rule)
+            : this(BooleanOperator.And, true, rule)
+        {
+            
+        }
+        
+        public RuleSet(BooleanOperator @operator, bool expectedResult, params Rule[] rules)
+        {
+            if (rules == null) throw new ArgumentNullException(nameof(rules));
+            if (rules.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(rules));
+
+            RuleGroups = new[]
+            {
+                new RuleGroup(@operator, expectedResult, rules)
+            };
         }
         
         public bool IsMatch<TContext>(TContext context)

@@ -51,7 +51,10 @@ namespace Stravaig.RulesEngine
         Func<TContext, bool> ICompiler.CompileToFunc<TContext>(ExpressionBuilder expr)
         {
             Func<TContext, bool> result = CompileExpressionToFunc<TContext>(expr);
-            return ctx => result(ctx) == ExpectedResult;
+            
+            if (ExpectedResult)
+                return result;
+            return ctx => result(ctx) == false;
         }
 
         private Func<TContext, bool> CompileExpressionToFunc<TContext>(ExpressionBuilder expr)
