@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Specialized;
+using System.Text;
 using Stravaig.RulesEngine.Compiler;
+using Stravaig.RulesEngine.Debugging;
 
 namespace Stravaig.RulesEngine
 {
@@ -50,6 +52,16 @@ namespace Stravaig.RulesEngine
                 return result;
             }
             // ReSharper restore UseNegatedPatternMatching
+        }
+
+        public override string ToString()
+        {
+            return $"{PropertyPath} {Operator} \"{Value}\"";
+        }
+
+        public void DEBUG_BuildRuleDefinition(StringBuilder sb, int indentLevel)
+        {
+            sb.Indent(indentLevel).Append(this);
         }
     }
 }

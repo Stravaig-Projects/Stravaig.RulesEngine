@@ -33,6 +33,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
         {
             // Check rule repository contains the rule we're testing for.
             _ruleRepository.RuleSetKeys.ShouldContain(methodName);
+            Console.WriteLine("The rule being tested:\n"+_ruleRepository.GetRuleSet(methodName).DEBUG_Rules);
             string[] matches = RunTest(isDebug, someNumber, someDate, someString);
 
             matches.Length.ShouldBeGreaterThanOrEqualTo(1);
@@ -43,6 +44,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
         {
             // Check rule repository contains the rule we're testing for.
             _ruleRepository.RuleSetKeys.ShouldContain(methodName);
+            Console.WriteLine("The rule being tested:\n"+_ruleRepository.GetRuleSet(methodName).DEBUG_Rules);
             string[] matches = RunTest(isDebug, someNumber, someDate, someString);
 
             matches.ShouldNotContain(methodName);

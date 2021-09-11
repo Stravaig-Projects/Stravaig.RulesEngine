@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Stravaig.RulesEngine.Compiler;
 
 namespace Stravaig.RulesEngine
@@ -66,6 +67,29 @@ namespace Stravaig.RulesEngine
                 var wrapper = new CompiledExpressionWrapper<TContext>(typeof(TContext), func);
                 _compiledMatchers.Add(typeof(TContext), wrapper);
                 return wrapper.IsMatch;
+            }
+        }
+
+        public string DEBUG_Rules
+        {
+            get
+            {
+                StringBuilder sb = new ();
+                bool hasMultipleGroups = RuleGroups.Length > 1;
+                if (hasMultipleGroups)
+                    sb.AppendLine("(");
+                bool isFirst = true;
+                foreach (var group in RuleGroups)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        sb.AppendLine("  AND");
+                    group.DEBUG_BuildRuleGroupDefinition(sb, hasMultipleGroups ? 1 : 0);
+                }
+                if (hasMultipleGroups)
+                    sb.AppendLine(") == true");
+                return sb.ToString();
             }
         }
         

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Stravaig.RulesEngine.Compiler;
+using Stravaig.RulesEngine.Debugging;
 
 namespace Stravaig.RulesEngine
 {
@@ -101,6 +103,33 @@ namespace Stravaig.RulesEngine
         private static Func<TContext, bool> CreateOrFunc<TContext>(Func<TContext, bool> resultSoFar, Func<TContext, bool> compiledRule)
         {
             return ctx => resultSoFar(ctx) || compiledRule(ctx);
+        }
+
+        internal void DEBUG_BuildRuleGroupDefinition(StringBuilder sb, int indentLevel)
+        {
+            sb.Indent(indentLevel).AppendLine("(");
+            bool isFirst = true;
+            foreach (var rule in Rules)
+            {
+                if (isFirst)
+                    isFirst = false;
+                else
+                    sb.AppendLine($" {BooleanOperator}");
+                rule.DEBUG_BuildRuleDefinition(sb, indentLevel + 1);
+            }
+
+            if (!isFirst)
+                sb.AppendLine();
+
+            foreach(var group in RuleGroups)
+            {
+                if (isFirst)
+                    isFirst = false;
+                else
+                    sb.AppendLine($" {BooleanOperator}");
+                DEBUG_BuildRuleGroupDefinition(sb, indentLevel + 1);
+            }
+            sb.Indent(indentLevel).AppendLine($") == {ExpectedResult}");
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Stravaig.RulesEngine.Compiler;
 using Stravaig.RulesEngine.Compiler.OperatorBuilders;
@@ -53,6 +54,13 @@ namespace Stravaig.RulesEngine
                 lock(_syncRoot) 
                     return _ruleSets.Keys.ToArray();
             }
+        }
+
+        public RuleSet GetRuleSet([DisallowNull] TKey key)
+        {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            lock (_syncRoot)
+                return _ruleSets[key];
         }
 
         public RulesEngineSession<TKey, TContext> StartSession<TContext>(Func<TKey, bool>? filterPredicate = null)
