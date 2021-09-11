@@ -5,7 +5,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
 {
     public partial class RuleTests
     {
-        private KeyValuePair<string, RuleSet>[] SingleRuleTestSets =>
+        private static KeyValuePair<string, RuleSet>[] SingleRuleTestSets =>
             new KeyValuePair<string, RuleSet>[]
             {
                 new(nameof(SomeNumberIs100Test), new RuleSet(new[]

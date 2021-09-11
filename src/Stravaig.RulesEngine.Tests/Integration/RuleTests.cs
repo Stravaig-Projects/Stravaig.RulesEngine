@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
@@ -22,11 +23,29 @@ namespace Stravaig.RulesEngine.Tests.Integration
         public void OneTimeSetUp()
         {
             _ruleRepository = new RuleRepository<string>();
-            _ruleRepository.Load(
-                SingleRuleTestSets
-                    .Union(MultipleRuleTestSets)
-                    .Union(StringEqualityRuleSets)
-                    .Union(MultipleRuleGroupTestSets));
+            _ruleRepository.Load(AllRuleSets);
+        }
+
+        private static IEnumerable<KeyValuePair<string, RuleSet>> AllRuleSets =>
+            SingleRuleTestSets
+                .Union(MultipleRuleTestSets)
+                .Union(StringEqualityRuleSets)
+                .Union(MultipleRuleGroupTestSets);
+
+        private static IEnumerable<string> AllRuleSetNames => AllRuleSets.Select(rs => rs.Key);
+
+        [Test]
+        public void __Diagnostic_AvailableBuilders()
+        {
+            Console.WriteLine(_ruleRepository.DEBUG_AvailableBuilders);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(AllRuleSetNames))]
+        public void __Diagnostic_Rules(string name)
+        {
+            var ruleSet = _ruleRepository.GetRuleSet(name);
+            Console.WriteLine(ruleSet.DEBUG_Rules);
         }
         
         private void ShouldMatchRule(bool isDebug, int someNumber = default, DateTime someDate = default, string someString = default, [CallerMemberName]string methodName = null)
