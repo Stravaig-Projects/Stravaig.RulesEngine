@@ -127,7 +127,7 @@ namespace Stravaig.RulesEngine
                     isFirst = false;
                 else
                     sb.AppendLine($" {BooleanOperator}");
-                DEBUG_BuildRuleGroupDefinition(sb, indentLevel + 1);
+                group.DEBUG_BuildRuleGroupDefinition(sb, indentLevel + 1);
             }
             sb.Indent(indentLevel).AppendLine($") == {ExpectedResult}");
         }
