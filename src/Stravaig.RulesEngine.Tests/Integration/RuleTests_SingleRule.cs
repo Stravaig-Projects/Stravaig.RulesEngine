@@ -41,9 +41,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
             };
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void SomeNumberIs100Test(bool isDebug)
+        public void SomeNumberIs100Test([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, 100);
         }

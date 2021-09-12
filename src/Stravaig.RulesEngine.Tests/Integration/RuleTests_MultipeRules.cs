@@ -36,9 +36,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
             };
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void NumberAndDateEqualityTest(bool isDebug)
+        public void NumberAndDateEqualityTest([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, 100, new DateTime(2021, 09, 04));
         }

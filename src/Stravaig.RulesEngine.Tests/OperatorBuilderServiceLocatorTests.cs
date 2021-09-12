@@ -27,18 +27,20 @@ namespace Stravaig.RulesEngine.Tests
             ex.OperatorName.ShouldBe("InvalidOperatorName");
         }
 
-        // [Test]
-        // public void DuplicateNameThrowsException()
-        // {
-        //     var locator = new OperatorBuilderLocator(typeof(DuplicateEqualsOperatorBuilder).Assembly);
-        //     var ex = Should.Throw<OperatorBuilderWithNameAlreadyExistsException>(() => locator.GetBuilder("DoNotCare", null));
-        //     ex.OperatorName.ShouldBe("==");
-        //     ex.BuilderType.ShouldBe(typeof(DuplicateEqualsOperatorBuilder));
-        //     ex.ExistingBuilderType.ShouldBe(typeof(EqualsOperatorBuilder));
-        // }
+        [Test]
+        public void InvalidOperatorTypeThrowsException()
+        {
+            var locator = new OperatorBuilderLocator();
+            var ex = Should.Throw<OperatorBuilderForTypeNotFoundException>(
+                () => locator.GetBuilder("IsContainedIn", typeof(bool)));
+            Console.WriteLine(ex);
+            ex.OperatorName.ShouldBe("IsContainedIn");
+            ex.DesiredType.ShouldBe(typeof(bool));
+            ex.AvailableTypes.ShouldContain(typeof(int));
+        }
 
         [Test]
-        public void ShowDebugOutput()
+        public void __Diagnostic_ShowDebugOutput()
         {
             // Not a test, but a quick way to visually inspect the debug info
             // string that would be displayed to a developer in the debugger.

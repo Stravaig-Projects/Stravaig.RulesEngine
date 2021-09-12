@@ -27,18 +27,14 @@ namespace Stravaig.RulesEngine.Tests.Integration
             };
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void StringOrdinalEquals(bool isDebug)
+        public void StringOrdinalEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "abc");
             ShouldNotMatchRule(isDebug, someString: "ABC");
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void StringOrdinalIgnoreCaseEquals(bool isDebug)
+        public void StringOrdinalIgnoreCaseEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "abc");
             ShouldMatchRule(isDebug, someString: "ABC");
@@ -46,18 +42,14 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void StringOrdinalNotEquals(bool isDebug)
+        public void StringOrdinalNotEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "DEF");
             ShouldNotMatchRule(isDebug, someString: "def");
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void StringOrdinalIgnoreCaseNotEquals(bool isDebug)
+        public void StringOrdinalIgnoreCaseNotEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "123");
             ShouldNotMatchRule(isDebug, someString: "DEF");
@@ -65,18 +57,14 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void InvariantCultureEquals(bool isDebug)
+        public void InvariantCultureEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "ghi");
             ShouldNotMatchRule(isDebug, someString: "GHI");
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void InvariantCultureIgnoreCaseEquals(bool isDebug)
+        public void InvariantCultureIgnoreCaseEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "ghi");
             ShouldMatchRule(isDebug, someString: "GHI");
@@ -84,18 +72,14 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void InvariantCultureNotEquals(bool isDebug)
+        public void InvariantCultureNotEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "KLM");
             ShouldNotMatchRule(isDebug, someString: "klm");
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void InvariantCultureIgnoreCaseNotEquals(bool isDebug)
+        public void InvariantCultureIgnoreCaseNotEquals([Values] bool isDebug)
         {
             ShouldMatchRule(isDebug, someString: "123");
             ShouldNotMatchRule(isDebug, someString: "klm");
@@ -103,10 +87,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
         [NonParallelizable]
-        public void CurrentCultureEquals(bool isDebug)
+        public void CurrentCultureEquals([Values] bool isDebug)
         {
             var originalCulture = Thread.CurrentThread.CurrentCulture;
             try
@@ -123,10 +105,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
         [NonParallelizable]
-        public void CurrentCultureIgnoreCaseEquals(bool isDebug)
+        public void CurrentCultureIgnoreCaseEquals([Values] bool isDebug)
         {
             var originalCulture = Thread.CurrentThread.CurrentCulture;
             try
@@ -144,10 +124,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
         [NonParallelizable]
-        public void CurrentCultureNotEquals(bool isDebug)
+        public void CurrentCultureNotEquals([Values] bool isDebug)
         {
             var originalCulture = Thread.CurrentThread.CurrentCulture;
             try
@@ -163,10 +141,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
         }
         
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
         [NonParallelizable]
-        public void CurrentCultureIgnoreCaseNotEquals(bool isDebug)
+        public void CurrentCultureIgnoreCaseNotEquals([Values] bool isDebug)
         {
             var originalCulture = Thread.CurrentThread.CurrentCulture;
             try

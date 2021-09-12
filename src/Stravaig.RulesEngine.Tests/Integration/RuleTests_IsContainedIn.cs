@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -10,6 +11,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
             {
                 new(nameof(IntIsContainedIn), new RuleSet(new Rule("SomeNumber", "IsContainedIn", "1|3|5"))), 
                 new(nameof(IntIsNotContainedIn), new RuleSet(new Rule("SomeNumber", "IsNotContainedIn", "8|6|4"))), 
+                new(nameof(DateIsContainedIn), new RuleSet(new Rule("SomeDate", "IsContainedIn", "2021-08-01|2021-09-12|2021-10-31"))), 
+                new(nameof(DateIsNotContainedIn), new RuleSet(new Rule("SomeDate", "IsNotContainedIn", "1999-05-06|2003-05-01|2007-05-03|2011-05-05|2016-05-05|2021-05-06"))), 
             };
         
         [Test]
@@ -54,5 +57,16 @@ namespace Stravaig.RulesEngine.Tests.Integration
                 ShouldNotMatchRule(isDebug, someNumber: number);
         }
 
+        [Test]
+        public void DateIsContainedIn([Values] bool isDebug)
+        {
+            ShouldMatchRule(isDebug, someDate: new DateTime(2021, 09, 12));
+        }
+        
+        [Test]
+        public void DateIsNotContainedIn([Values] bool isDebug)
+        {
+            ShouldMatchRule(isDebug, someDate: new DateTime(2021, 09, 12));
+        }
     }
 }

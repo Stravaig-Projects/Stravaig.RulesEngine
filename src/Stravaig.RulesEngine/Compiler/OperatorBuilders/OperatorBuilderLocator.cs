@@ -81,9 +81,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         {
             if (_lazyLookup.Value.TryGetValue(name, out var builderList))
             {
-                var result = GetBestOperatorBuilder(builderList, desiredLeftType);
-                if (result != null)
-                    return result;
+                return GetBestOperatorBuilder(builderList, desiredLeftType, name);
             }
             throw new OperatorBuilderNotFoundException(name);
         }
@@ -120,12 +118,19 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
             }
         }
 
-        private static OperatorBuilder? GetBestOperatorBuilder(IReadOnlyList<OperatorBuilder> builderList, Type desiredLeftType)
+        private static OperatorBuilder GetBestOperatorBuilder(IReadOnlyList<OperatorBuilder> builderList, Type desiredLeftType, string operatorName)
         {
-            return builderList
+            var result = builderList
                 .Where(ob => ob.CanMatchType(desiredLeftType))
                 .OrderByDescending(ob=>ob.LeftType, OperatorBuilder.CompareWithRespectTo(desiredLeftType))
                 .FirstOrDefault();
+            if (result != null)
+                return result;
+
+            var availableTypes = builderList
+                .Select(b => b.LeftType)
+                .ToArray();
+            throw new OperatorBuilderForTypeNotFoundException(operatorName, desiredLeftType, availableTypes);
         }
 
         private IReadOnlyDictionary<string, List<OperatorBuilder>> BuildDictionary()
