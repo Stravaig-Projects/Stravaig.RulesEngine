@@ -28,6 +28,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
 
         private static IEnumerable<KeyValuePair<string, RuleSet>> AllRuleSets =>
             SingleRuleTestSets
+                .Union(IsContainedInRuleSets)
                 .Union(MultipleRuleTestSets)
                 .Union(StringEqualityRuleSets)
                 .Union(MultipleRuleGroupTestSets);

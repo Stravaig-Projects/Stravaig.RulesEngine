@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using NUnit.Framework;
 using Shouldly;
 using Stravaig.RulesEngine.Compiler.OperatorBuilders;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders.General;
 
 namespace Stravaig.RulesEngine.Tests
 {

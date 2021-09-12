@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
+namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.General
 {
     /// <summary>
     /// Represents the == (Equals) operator.
