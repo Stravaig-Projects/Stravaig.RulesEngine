@@ -10,6 +10,17 @@ namespace Stravaig.RulesEngine.Tests.Integration
     [TestFixture]
     public partial class RuleTests
     {
+        public enum ShouldNotMatch
+        {
+            ShouldNotMatch,
+        }
+
+        public enum ShouldMatch
+        {
+            ShouldMatch,
+        }
+        
+        
         private class TheContext
         {
             public int SomeNumber { get; set; }
@@ -28,6 +39,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
 
         private static IEnumerable<KeyValuePair<string, RuleSet>> AllRuleSets =>
             SingleRuleTestSets
+                .Union(IsBetweenRuleSets)
                 .Union(IsContainedInRuleSets)
                 .Union(MultipleRuleTestSets)
                 .Union(StringEqualityRuleSets)
