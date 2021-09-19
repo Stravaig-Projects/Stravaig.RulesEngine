@@ -92,7 +92,7 @@ namespace Stravaig.RulesEngine.Tests.Integration
                 Console.WriteLine($"Matches found when SomeNumber={context.SomeNumber}; SomeDate={context.SomeDate:O}; SomeString=\"{context.SomeString}\":\n" + string.Join("\n", matches.Select(s => $" * {s}")));
                 return matches;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("Available Operators:");
                 Console.WriteLine(_ruleRepository.DEBUG_AvailableBuilders);

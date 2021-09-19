@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -10,6 +11,8 @@ namespace Stravaig.RulesEngine.Tests.Integration
             {
                 new(nameof(IntIsBetween), new RuleSet(new Rule("SomeNumber", "IsBetween", "1|10"))), 
                 new(nameof(IntIsNotBetween), new RuleSet(new Rule("SomeNumber", "IsNotBetween", "111|222"))), 
+                new(nameof(DateTimeIsBetween), new RuleSet(new Rule("SomeDate", "IsBetween", "2021-09-01|2021-09-10"))), 
+                new(nameof(DateTimeIsNotBetween), new RuleSet(new Rule("SomeDate", "IsNotBetween", "2021-09-11|2021-09-22"))), 
             };
 
         [Test]
@@ -35,5 +38,30 @@ namespace Stravaig.RulesEngine.Tests.Integration
         {
             ShouldMatchRule(isDebug, someNumber: someNumber);
         }
+        
+        [Test]
+        public void DateTimeIsBetween([Values]bool isDebug, [Values(1,5,10)]int dayOfMonth, [Values]ShouldMatch _)
+        {
+            ShouldMatchRule(isDebug, someDate: new DateTime(2021, 9, dayOfMonth));
+        }
+
+        [Test]
+        public void DateTimeIsBetween([Values]bool isDebug, [Values(11, 12)]int dayOfMonth, [Values]ShouldNotMatch _)
+        {
+            ShouldNotMatchRule(isDebug,someDate: new DateTime(2021, 9, dayOfMonth));
+        }
+        
+        [Test]
+        public void DateTimeIsNotBetween([Values]bool isDebug, [Values(11, 19, 22)]int dayOfMonth, [Values]ShouldNotMatch _)
+        {
+            ShouldNotMatchRule(isDebug, someDate: new DateTime(2021, 9, dayOfMonth));
+        }
+
+        [Test]
+        public void DateTimeIsNotBetween([Values]bool isDebug, [Values(1, 10, 23, 30)]int dayOfMonth, [Values]ShouldMatch _)
+        {
+            ShouldMatchRule(isDebug, someDate: new DateTime(2021, 9, dayOfMonth));
+        }
+
     }
 }
