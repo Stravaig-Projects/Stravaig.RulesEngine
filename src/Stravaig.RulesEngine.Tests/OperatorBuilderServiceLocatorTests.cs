@@ -18,6 +18,18 @@ namespace Stravaig.RulesEngine.Tests
             var handler = locator.GetBuilder("==", null);
             handler.ShouldBeOfType(typeof(EqualsOperatorBuilder));
         }
+
+        [Test]
+        [TestCase("Equals")]
+        [TestCase("equals")]
+        [TestCase("EQUALS")]
+        [TestCase("EqUaLs")]
+        public void LocatesCorrectOperatorRegardlessOfCapitalisation(string operatorName)
+        {
+            var locator = new OperatorBuilderLocator();
+            var handler = locator.GetBuilder(operatorName, null);
+            handler.ShouldBeOfType(typeof(EqualsOperatorBuilder));
+        }
         
         [Test]
         public void InvalidOperatorNameThrowsException()

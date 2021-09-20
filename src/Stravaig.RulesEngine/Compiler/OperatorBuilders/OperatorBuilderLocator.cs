@@ -135,7 +135,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
 
         private IReadOnlyDictionary<string, List<OperatorBuilder>> BuildDictionary()
         {
-            var result = new Dictionary<string, List<OperatorBuilder>>();
+            var result = new Dictionary<string, List<OperatorBuilder>>(StringComparer.OrdinalIgnoreCase);
             foreach (var builderType in _builderTypes)
             {
                 var handler = (OperatorBuilder?)Activator.CreateInstance(builderType);
