@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <StravaigBuildTime>$([System.DateTime]::Now.ToString("dddd, d MMMM yyyy 'at' HH:mm:ss zzzz"))</StravaigBuildTime>
+        <StravaigCopyrightYear>$([System.DateTime]::Now.ToString("yyyy"))</StravaigCopyrightYear>
+        <StravaigGitHubCommit>$(GITHUB_SHA)</StravaigGitHubCommit>
+        <StravaigWorkflowUrl>$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/actions/runs/$(GITHUB_RUN_ID)</StravaigWorkflowUrl>
+        <StravaigReleaseNotes>https://github.com/$(GITHUB_REPOSITORY)/releases/tag/$(STRAVAIG_RELEASE_TAG)</StravaigReleaseNotes>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>Stravaig Rules Engine</Title>
+        <Authors>Colin Angus Mackay</Authors>
+        <Copyright>©$(StravaigCopyrightYear) Stravaig Projects. See licence for more information.</Copyright>
+        <PackageProjectUrl>https://github.com/$(GITHUB_REPOSITORY)/blob/$(StravaigGitHubCommit)/README.md</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/$(GITHUB_REPOSITORY)</RepositoryUrl>
+        <PackageIcon>stravaig-icon.png</PackageIcon>
+        <PackageTags>RulesEngine rules LogicEngine DependencyInjection</PackageTags>
+        <!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+        <Description>The dependency injection extensions for Stravaig.RulesEngine
+
+            Built on $(StravaigBuildTime).
+            Build run details at: $(StravaigWorkflowUrl)
+            Release notes at: $(StravaigReleaseNotes)
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="stravaig-icon.png" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.19" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Stravaig.RulesEngine\Stravaig.RulesEngine.csproj" />
+    </ItemGroup>
+</Project>

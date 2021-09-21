@@ -7,7 +7,18 @@ using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
 namespace Stravaig.RulesEngine
 {
-    public class RuleRepository<TKey>
+    public interface IRuleRepository<TKey>
+    {
+        // ReSharper disable once InconsistentNaming
+        string DEBUG_AvailableBuilders { get; }
+        TKey[] RuleSetKeys { get; }
+        void Load(IEnumerable<KeyValuePair<TKey, RuleSet>> rules);
+        void Load(Func<IEnumerable<KeyValuePair<TKey, RuleSet>>> keyValueFactory);
+        RuleSet GetRuleSet([DisallowNull] TKey key);
+        RulesEngineSession<TKey, TContext> StartSession<TContext>(Func<TKey, bool>? filterPredicate = null);
+    }
+
+    public class RuleRepository<TKey> : IRuleRepository<TKey>
     {
         private readonly RulesEngineOptions<TKey> _options;
         private readonly ExpressionBuilder _expressionBuilder;
@@ -86,9 +97,5 @@ namespace Stravaig.RulesEngine
 
             return new RulesEngineSession<TKey, TContext>(snapshot);
         }
-    }
-
-    public class RuleRepository : RuleRepository<object>
-    {
     }
 }

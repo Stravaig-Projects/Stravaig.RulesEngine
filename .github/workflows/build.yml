@@ -78,11 +78,11 @@ jobs:
        
       - name: Package Preview Release
         if: ${{ env.STRAVAIG_IS_PREVIEW == 'true' }}
-        run: dotnet pack ./src/$STRAVAIG_PROJECT/$STRAVAIG_PROJECT.csproj --configuration Release --output ./out --include-symbols --include-source /p:VersionPrefix="$STRAVAIG_PACKAGE_VERSION" --version-suffix "$STRAVAIG_PACKAGE_VERSION_SUFFIX" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+        run: dotnet pack "$STRAVAIG_SOLUTION" --configuration Release --output ./out --include-symbols --include-source /p:VersionPrefix="$STRAVAIG_PACKAGE_VERSION" --version-suffix "$STRAVAIG_PACKAGE_VERSION_SUFFIX" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
        
       - name: Package Stable Release
         if: ${{ env.STRAVAIG_IS_STABLE == 'true' }}
-        run: dotnet pack ./src/$STRAVAIG_PROJECT/$STRAVAIG_PROJECT.csproj --configuration Release --output ./out --include-symbols --include-source /p:VersionPrefix="$STRAVAIG_PACKAGE_VERSION" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+        run: dotnet pack "$STRAVAIG_SOLUTION" --configuration Release --output ./out --include-symbols --include-source /p:VersionPrefix="$STRAVAIG_PACKAGE_VERSION" -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: Push package to NuGet
         if: ${{ env.STRAVAIG_PUBLISH_TO_NUGET == 'true' }}
