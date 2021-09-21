@@ -64,7 +64,12 @@ jobs:
           echo "Publish To NuGet: $STRAVAIG_PUBLISH_TO_NUGET"
           echo "Is Preview: $STRAVAIG_IS_PREVIEW"
           echo "Is Stable: $STRAVAIG_IS_STABLE"
-          
+
+      - uses: actions/setup-dotnet@v1
+        name: Setup .NET Core 3.1 (LTS)
+        with:
+          dotnet-version: 3.1.x
+
       - uses: actions/setup-dotnet@v1
         name: Setup .NET 5.0 (Current)
         with:
