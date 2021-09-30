@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Stravaig.RulesEngine.Compiler;
 using Stravaig.RulesEngine.Compiler.OperatorBuilders;
 
@@ -21,18 +23,25 @@ namespace Stravaig.RulesEngine
     public class RuleRepository<TKey> : IRuleRepository<TKey>
     {
         private readonly RulesEngineOptions<TKey> _options;
+        private readonly ILogger<RuleRepository<TKey>> _logger;
         private readonly ExpressionBuilder _expressionBuilder;
         private readonly object _syncRoot = new ();
         private readonly Dictionary<TKey, RuleSet> _ruleSets;
 
         public RuleRepository()
-            : this (new RulesEngineOptions<TKey>())
+            : this (new RulesEngineOptions<TKey>(), new NullLogger<RuleRepository<TKey>>())
         {
         }
-        
+
         public RuleRepository(RulesEngineOptions<TKey> options)
+            : this(options, new NullLogger<RuleRepository<TKey>>())
+        {
+        }
+
+        public RuleRepository(RulesEngineOptions<TKey> options, ILogger<RuleRepository<TKey>> logger)
         {
             _options = options;
+            _logger = logger;
             _expressionBuilder = new ExpressionBuilder(new OperatorBuilderLocator(options.AdditionalOperatorAssemblies));
             _ruleSets = new Dictionary<TKey, RuleSet>(options.KeyEqualityComparer);
         }
