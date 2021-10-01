@@ -1,10 +1,13 @@
 using System;
 using System.Linq.Expressions;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders.General;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.String
 {
-    public abstract class StringNotEqualsOperatorBuilder : StringEqualsOperatorBuilder
+    public class StringNotEqualsOperatorBuilder : StringEqualsOperatorBuilder
     {
+        public override string[] OperatorNames => NotEqualsOperatorBuilder.StandardOperatorNames;
+
         protected override Expression Build(Expression leftPropertyExpression, string rightValueAsString, StringComparison stringComparison)
         {
             // result|> left == null ? (right == null ? false : true) : !(left.Equals(right, stringComparison));

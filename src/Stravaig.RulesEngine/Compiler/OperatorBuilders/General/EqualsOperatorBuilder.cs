@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.General
@@ -7,13 +8,13 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.General
     /// </summary>
     public class EqualsOperatorBuilder : OperatorBuilder
     {
-        internal static readonly string[] StandardOperatorNames = { "==", "Equals" };
+        public static readonly string[] StandardOperatorNames = { "==", "Equals" };
 
         /// <inheritdoc />
         public override string[] OperatorNames => StandardOperatorNames;
 
         /// <inheritdoc />
-        public override Expression Build(Expression left, string right)
+        public override Expression Build(Expression left, string right, Enum[] modifiers)
         {
             return Expression.Equal(left, GetRightExpressionFromConstantValue(right, left.Type));
         }

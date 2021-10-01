@@ -15,7 +15,7 @@ namespace Stravaig.RulesEngine.Tests
         public void DefaultInstantiationAllowsAccessToEqualsOperator()
         {
             var locator = new OperatorBuilderLocator();
-            var handler = locator.GetBuilder("==", null);
+            var handler = locator.GetBuilder("==", typeof(int));
             handler.ShouldBeOfType(typeof(EqualsOperatorBuilder));
         }
 
@@ -27,7 +27,7 @@ namespace Stravaig.RulesEngine.Tests
         public void LocatesCorrectOperatorRegardlessOfCapitalisation(string operatorName)
         {
             var locator = new OperatorBuilderLocator();
-            var handler = locator.GetBuilder(operatorName, null);
+            var handler = locator.GetBuilder(operatorName, typeof(int));
             handler.ShouldBeOfType(typeof(EqualsOperatorBuilder));
         }
         

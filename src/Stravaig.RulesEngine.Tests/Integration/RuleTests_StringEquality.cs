@@ -11,19 +11,19 @@ namespace Stravaig.RulesEngine.Tests.Integration
         private static KeyValuePair<string, RuleSet>[] StringEqualityRuleSets =>
             new KeyValuePair<string, RuleSet>[]
             {
-                new(nameof(StringOrdinalEquals), new RuleSet(new Rule("SomeString", "OrdinalEquals", "abc"))),
-                new(nameof(StringOrdinalNotEquals), new RuleSet(new Rule("SomeString", "OrdinalNotEquals", "def"))),
-                new(nameof(InvariantCultureEquals), new RuleSet(new Rule("SomeString", "InvariantCultureEquals", "ghi"))),
-                new(nameof(InvariantCultureNotEquals), new RuleSet(new Rule("SomeString", "InvariantCultureNotEquals", "klm"))),
-                new(nameof(CurrentCultureEquals), new RuleSet(new Rule("SomeString", "CurrentCultureEquals", "nop"))),
-                new(nameof(CurrentCultureNotEquals), new RuleSet(new Rule("SomeString", "CurrentCultureNotEquals", "qrs"))),
+                new(nameof(StringOrdinalEquals), new RuleSet(new Rule("SomeString", "Equals", "abc"))),
+                new(nameof(StringOrdinalNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "def"))),
+                new(nameof(InvariantCultureEquals), new RuleSet(new Rule("SomeString", "Equals", "ghi", StringComparison.InvariantCulture))),
+                new(nameof(InvariantCultureNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "klm", StringComparison.InvariantCulture))),
+                new(nameof(CurrentCultureEquals), new RuleSet(new Rule("SomeString", "Equals", "nop", StringComparison.CurrentCulture))),
+                new(nameof(CurrentCultureNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "qrs", StringComparison.CurrentCulture))),
 
-                new(nameof(StringOrdinalIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "OrdinalIgnoreCaseEquals", "abc"))),
-                new(nameof(StringOrdinalIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "OrdinalIgnoreCaseNotEquals", "def"))),
-                new(nameof(InvariantCultureIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "InvariantCultureIgnoreCaseEquals", "ghi"))),
-                new(nameof(InvariantCultureIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "InvariantCultureIgnoreCaseNotEquals", "klm"))),
-                new(nameof(CurrentCultureIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "CurrentCultureIgnoreCaseEquals", "nop"))),
-                new(nameof(CurrentCultureIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "CurrentCultureIgnoreCaseNotEquals", "qrs"))),
+                new(nameof(StringOrdinalIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "Equals", "abc", StringComparison.OrdinalIgnoreCase))),
+                new(nameof(StringOrdinalIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "def", StringComparison.OrdinalIgnoreCase))),
+                new(nameof(InvariantCultureIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "Equals", "ghi", StringComparison.InvariantCultureIgnoreCase))),
+                new(nameof(InvariantCultureIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "klm", StringComparison.InvariantCultureIgnoreCase))),
+                new(nameof(CurrentCultureIgnoreCaseEquals), new RuleSet(new Rule("SomeString", "Equals", "nop", StringComparison.CurrentCultureIgnoreCase))),
+                new(nameof(CurrentCultureIgnoreCaseNotEquals), new RuleSet(new Rule("SomeString", "NotEquals", "qrs", StringComparison.CurrentCultureIgnoreCase))),
             };
         
         [Test]

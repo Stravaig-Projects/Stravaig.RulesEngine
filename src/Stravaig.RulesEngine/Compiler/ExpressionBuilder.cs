@@ -41,11 +41,13 @@ namespace Stravaig.RulesEngine.Compiler
         public Func<TContext, bool> Build<TContext>(
             string propertyPath,
             string @operator,
-            string value)
+            string value,
+            Enum[] modifiers)
         {
             if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
             if (@operator == null) throw new ArgumentNullException(nameof(@operator));
             if (value == null) throw new ArgumentNullException(nameof(value));
+            if (modifiers == null) throw new ArgumentNullException(nameof(modifiers));
 
             var paramExpr = Expression.Parameter(typeof(TContext), "context");
             var propertyExpression = BuildPropertyExpression<TContext>(propertyPath, paramExpr);
@@ -53,7 +55,7 @@ namespace Stravaig.RulesEngine.Compiler
 
             var handler = _serviceLocator.GetBuilder(@operator, propertyType);
 
-            var evaluationExpression = handler.Build(propertyExpression, value);
+            var evaluationExpression = handler.Build(propertyExpression, value, modifiers);
             var lambdaExpr = Expression.Lambda<Func<TContext, bool>>(evaluationExpression, paramExpr);
 
             var result = lambdaExpr.CompileFast();

@@ -32,29 +32,35 @@ namespace Stravaig.RulesEngine.Tests
         public void MissingExpressionThrowsException()
         {
             ExpressionBuilder builder = new ExpressionBuilder();
-            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>(null!, null!, null!));
+            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>(null!, null!, null!, null!));
         }
         
         [Test]
         public void MissingPropertyPathThrowsException()
         {
             ExpressionBuilder builder = new ExpressionBuilder();
-            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>("Some.Property.Path", null!, null!));
+            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>("Some.Property.Path", null!, null!, null!));
         }
 
         [Test]
         public void MissingValueThrowsException()
         {
             ExpressionBuilder builder = new ExpressionBuilder();
-            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>("Some.Property.Path", "==", null!));
+            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>("Some.Property.Path", "==", null!, null!));
         }
 
+        [Test]
+        public void MissingModifierThrowsException()
+        {
+            ExpressionBuilder builder = new ExpressionBuilder();
+            Should.Throw<ArgumentNullException>(() => builder.Build<TestContext>("Some.Property.Path", "==", "abc", null!));
+        }
         
         [Test]
         public void SinglePropertyEqualityExpression()
         {
             ExpressionBuilder builder = new ExpressionBuilder();
-            var func = builder.Build<TestContext>(nameof(TestContext.SomeStringProperty), "==", "abc");
+            var func = builder.Build<TestContext>(nameof(TestContext.SomeStringProperty), "==", "abc", Array.Empty<Enum>());
 
             func.ShouldNotBeNull();
 
@@ -72,7 +78,8 @@ namespace Stravaig.RulesEngine.Tests
             var func = builder.Build<TestContext>(
                 $"{nameof(TestContext.SubContextProperty)}.{nameof(SubContext.SubStringProperty)}",
                 "==",
-                "abc");
+                "abc",
+                Array.Empty<Enum>());
 
             func.ShouldNotBeNull();
 
@@ -92,7 +99,8 @@ namespace Stravaig.RulesEngine.Tests
                 () => builder.Build<TestContext>(
                     propertyPath,
                     "==",
-                    "abc"));
+                    "abc",
+                    Array.Empty<Enum>()));
 
             ex.FailingNode.ShouldBe(propertyPath);
             ex.PropertyPath.ShouldBe(propertyPath);
@@ -108,7 +116,8 @@ namespace Stravaig.RulesEngine.Tests
                 () => builder.Build<TestContext>(
                     propertyPath,
                     "==",
-                    "abc"));
+                    "abc",
+                    Array.Empty<Enum>()));
 
             ex.FailingNode.ShouldBe(propertyPath);
             ex.PropertyPath.ShouldBe(propertyPath);

@@ -1,16 +1,25 @@
 using System;
 using System.Linq.Expressions;
+using Stravaig.RulesEngine.Compiler.OperatorBuilders.General;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.String
 {
-    public abstract class StringEqualsOperatorBuilder : OperatorBuilder
+    public class StringEqualsOperatorBuilder : OperatorBuilder
     {
-        protected StringEqualsOperatorBuilder()
+        public StringEqualsOperatorBuilder()
             : base(typeof(string))
         {
             
         }
-        
+
+        public override string[] OperatorNames => EqualsOperatorBuilder.StandardOperatorNames;
+
+        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
+        {
+            var modifier = GetModifier(modifiers, StringComparison.Ordinal);
+            return Build(leftPropertyExpression, rightValueAsString, modifier);
+        }
+
         protected virtual Expression Build(Expression leftPropertyExpression, string rightValueAsString, StringComparison stringComparison)
         {
             // result|> left == null ? (right == null ? true : false) : left.Equals(right, stringComparison);

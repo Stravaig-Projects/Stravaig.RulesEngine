@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
@@ -43,7 +44,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
         /// <param name="left">The expression on the left of the operator.</param>
         /// <param name="right">The expression on the right of the operator.</param>
         /// <returns>An expression that evaluates left against right</returns>
-        public abstract Expression Build(Expression leftPropertyExpression, string rightValueAsString);
+        public abstract Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers);
 
         protected ConstantExpression GetRightExpressionFromConstantValue(object value, Type propertyType)
         {
@@ -52,6 +53,15 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders
             return valueExpression;
         }
 
+        protected TEnum GetModifier<TEnum>(Enum[] modifiers, TEnum defaultValue = default(TEnum))
+            where TEnum : Enum
+        {
+            return modifiers
+                .Where(m => m.GetType() == typeof(TEnum))
+                .Cast<TEnum>()
+                .FirstOrDefault() ?? defaultValue;
+        }
+        
         public bool CanMatchType(Type desiredLeftType)
         {
             return LeftType == null ||

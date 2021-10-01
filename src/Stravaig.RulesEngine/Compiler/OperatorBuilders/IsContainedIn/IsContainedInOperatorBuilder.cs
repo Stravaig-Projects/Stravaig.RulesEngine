@@ -14,7 +14,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsContainedIn
         {
         }
 
-        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
         {
             var items = GetSetOfItems(rightValueAsString);
             var type = items.GetType();

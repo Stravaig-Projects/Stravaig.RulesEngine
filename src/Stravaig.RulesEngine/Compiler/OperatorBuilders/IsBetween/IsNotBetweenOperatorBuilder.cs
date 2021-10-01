@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsBetween
@@ -6,9 +7,9 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsBetween
     {
         protected override string OperatorName => "IsNotBetween";
 
-        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
         {
-            return Expression.Not(base.Build(leftPropertyExpression, rightValueAsString));
+            return Expression.Not(base.Build(leftPropertyExpression, rightValueAsString, modifiers));
         }
     }
 }

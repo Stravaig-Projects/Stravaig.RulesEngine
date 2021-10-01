@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.General
@@ -13,7 +14,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.General
         public override string[] OperatorNames => _operatorNames;
 
         /// <inheritdoc />
-        public override Expression Build(Expression left, string right)
+        public override Expression Build(Expression left, string right, Enum[] modifiers)
         {
             return Expression.LessThanOrEqual(left, GetRightExpressionFromConstantValue(right, left.Type));
         }

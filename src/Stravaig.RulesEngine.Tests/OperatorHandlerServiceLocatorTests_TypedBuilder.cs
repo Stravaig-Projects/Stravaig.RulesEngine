@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace Stravaig.RulesEngine.Tests
             {
             }
 
-            public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+            public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
             {
                 throw new System.NotImplementedException();
             }
@@ -33,7 +34,7 @@ namespace Stravaig.RulesEngine.Tests
             {
             }
 
-            public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+            public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
             {
                 throw new System.NotImplementedException();
             }

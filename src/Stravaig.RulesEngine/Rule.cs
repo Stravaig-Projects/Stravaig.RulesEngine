@@ -15,12 +15,15 @@ namespace Stravaig.RulesEngine
         public string Operator { get; }
         
         public string Value { get; }
+        
+        public Enum[] Modifiers { get; }
 
-        public Rule(string propertyPath, string @operator, string value)
+        public Rule(string propertyPath, string @operator, string value, params Enum[] modifiers)
         {
             PropertyPath = propertyPath;
             Operator = @operator;
             Value = value;
+            Modifiers = modifiers;
         }
 
         public bool IsMatch<TContext>(TContext context)
@@ -45,7 +48,7 @@ namespace Stravaig.RulesEngine
                 var result = _compiledRules[contextType] as Func<TContext, bool>;
                 if (result == null)
                 {
-                    result = expr.Build<TContext>(PropertyPath, Operator, Value);
+                    result = expr.Build<TContext>(PropertyPath, Operator, Value, Modifiers);
                     _compiledRules[contextType] = result;
                 }
 

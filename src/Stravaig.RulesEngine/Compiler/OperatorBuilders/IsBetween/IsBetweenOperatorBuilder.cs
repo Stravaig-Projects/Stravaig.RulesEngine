@@ -13,7 +13,7 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsBetween
         {
         }
         
-        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
         {
             (T start, T end) = GetBounds(rightValueAsString);
 

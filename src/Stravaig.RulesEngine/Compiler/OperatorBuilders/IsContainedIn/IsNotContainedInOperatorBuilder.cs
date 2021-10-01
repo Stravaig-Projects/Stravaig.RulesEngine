@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 
 namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsContainedIn
@@ -6,9 +7,9 @@ namespace Stravaig.RulesEngine.Compiler.OperatorBuilders.IsContainedIn
     {
         protected override string OperatorName => "IsNotContainedIn";
 
-        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString)
+        public override Expression Build(Expression leftPropertyExpression, string rightValueAsString, Enum[] modifiers)
         {
-            var expression = base.Build(leftPropertyExpression, rightValueAsString);
+            var expression = base.Build(leftPropertyExpression, rightValueAsString, modifiers);
             return Expression.Not(expression);
         }
     }

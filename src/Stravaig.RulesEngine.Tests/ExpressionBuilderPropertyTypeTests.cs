@@ -22,7 +22,7 @@ namespace Stravaig.RulesEngine.Tests
         public void IntegerIsConvertedSuccessfully()
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("AnInteger", "==", "123");
+                .Build<TestContext>("AnInteger", "==", "123", Array.Empty<Enum>());
 
             func(new TestContext { AnInteger = 123 }).ShouldBeTrue();
             func(new TestContext { AnInteger = 456 }).ShouldBeFalse();
@@ -32,7 +32,7 @@ namespace Stravaig.RulesEngine.Tests
         public void DecimalIsConvertedSuccessfully()
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("ADecimal", "==", "123.456");
+                .Build<TestContext>("ADecimal", "==", "123.456", Array.Empty<Enum>());
 
             func(new TestContext { ADecimal = 123.456M }).ShouldBeTrue();
             func(new TestContext { ADecimal = 111.222M }).ShouldBeFalse();
@@ -42,7 +42,7 @@ namespace Stravaig.RulesEngine.Tests
         public void StringIsConvertedSuccessfully()
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("AString", "==", "abc");
+                .Build<TestContext>("AString", "==", "abc", Array.Empty<Enum>());
 
             func(new TestContext { AString = "abc" }).ShouldBeTrue();
             func(new TestContext { AString = "def" }).ShouldBeFalse();
@@ -55,7 +55,7 @@ namespace Stravaig.RulesEngine.Tests
         public void BooleanTrueIsConvertedSuccessfully(string booleanAsString)
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("ABoolean", "==", booleanAsString);
+                .Build<TestContext>("ABoolean", "==", booleanAsString, Array.Empty<Enum>());
 
             func(new TestContext { ABoolean = true }).ShouldBeTrue();
             func(new TestContext { ABoolean = false }).ShouldBeFalse();
@@ -68,7 +68,7 @@ namespace Stravaig.RulesEngine.Tests
         public void BooleanFalseIsConvertedSuccessfully(string booleanAsString)
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("ABoolean", "==", booleanAsString);
+                .Build<TestContext>("ABoolean", "==", booleanAsString, Array.Empty<Enum>());
 
             func(new TestContext { ABoolean = false }).ShouldBeTrue();
             func(new TestContext { ABoolean = true }).ShouldBeFalse();
@@ -83,7 +83,7 @@ namespace Stravaig.RulesEngine.Tests
         public void DateTimeIsConvertedSuccessfully(string dateTimeAsString, int year, int month, int day, int hour, int minute, int second, int millisecond)
         {
             var func = new ExpressionBuilder()
-                .Build<TestContext>("ADateTime", "==", dateTimeAsString);
+                .Build<TestContext>("ADateTime", "==", dateTimeAsString, Array.Empty<Enum>());
 
             func(new TestContext { ADateTime = new DateTime(year, month, day, hour, minute, second, millisecond) }).ShouldBeTrue();
             func(new TestContext { ADateTime = DateTime.UnixEpoch }).ShouldBeFalse();
